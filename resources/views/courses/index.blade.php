@@ -23,6 +23,7 @@
                             <tr>
                                 <th scope="col">Title</th>
                                 <th scope="col">Description</th>
+                                <th scope="col">Video</th>
                                 <th scope="col">Start Date</th>
                                 <th scope="col">End Date</th>
                                 <th scope="col">Actions</th>
@@ -33,6 +34,16 @@
                                 <tr>
                                     <td>{{ $course->title }}</td>
                                     <td>{{ $course->description }}</td>
+                                    <td>
+                                        @if($course->video_url)
+                                            <video width="200" controls>
+                                                <source src="{{ $course->video_url }}" type="video/mp4">
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        @else
+                                            <p>No video available</p>
+                                        @endif
+                                    </td>
                                     <td>{{ $course->start_date }}</td>
                                     <td>{{ $course->end_date }}</td>
                                     <td>

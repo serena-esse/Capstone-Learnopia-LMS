@@ -17,6 +17,11 @@
                             <input type="text" class="form-control" id="title" name="title" value="{{ $course->title }}" required>
                         </div>
                         <div class="mb-3">
+                            <label for="video_url" class="form-label">Video URL:</label>
+                            <input type="url" class="form-control" name="video_url" id="video_url" value="{{ $course->video_url }}">
+                        </div>
+
+                        <div class="mb-3">
                             <label for="description" class="form-label">Description:</label>
                             <textarea class="form-control" id="description" name="description" required>{{ $course->description }}</textarea>
                         </div>

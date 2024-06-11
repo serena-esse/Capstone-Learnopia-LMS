@@ -44,6 +44,7 @@ class CourseController extends Controller
             'description' => 'required|string',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
+            'video_url' => 'nullable|url',
         ]);
         // $user_id = Auth::user()->id;
         try{
@@ -52,6 +53,7 @@ class CourseController extends Controller
         $course->description = $request['description'];
         $course->start_date = $request['start_date'];
         $course->end_date = $request['end_date'];
+        $course->video_url = $request->video_url;
         $course->users_id = Auth::user()->id;
         $course->save();
         return redirect()->route('courses.index')->with('success', 'Course created successfully.');
@@ -87,6 +89,7 @@ class CourseController extends Controller
             'description' => 'required|string',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
+            'video_url' => 'nullable|url',
         ]);
 
         $course->update($request->all());

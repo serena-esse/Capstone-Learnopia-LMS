@@ -11,6 +11,9 @@
                 <div class="mb-4">
                     <p><strong>Title:</strong> {{ $course->title }}</p>
                 </div>
+                <div class="mb-4">  @if($course->video_url)
+        <p><strong>Video:</strong> <a href="{{ $course->video_url }}" target="_blank">{{ $course->video_url }}</a></p>
+    @endif</div>
                 <div class="mb-4">
                     <p><strong>Description:</strong> {{ $course->description }}</p>
                 </div>

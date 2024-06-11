@@ -17,6 +17,10 @@
                                 <input type="text" class="form-control" id="title" name="title" required>
                             </div>
                             <div class="form-group">
+                                <label for="video_url">Video URL:</label>
+                                <input type="url" class="form-control" name="video_url" id="video_url" value="">
+                            </div>
+                            <div class="form-group">
                                 <label for="description">Description:</label>
                                 <textarea class="form-control" id="description" name="description" required></textarea>
                             </div>

@@ -12,7 +12,8 @@ class Course extends Model
         'title',
         'description',
         'start_date',
-        'end_date'
+        'end_date',
+        'video_url'
     ];
 
         public function user()
