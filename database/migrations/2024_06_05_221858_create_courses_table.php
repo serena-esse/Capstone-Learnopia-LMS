@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('start_date');
             $table->date('end_date');
             $table->foreignId('users_id')->constrained()->cascadeOnDelete();
+            $table->unsignedTinyInteger('progress')->default(0);
             $table->timestamps();
         });
     }

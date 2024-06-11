@@ -18,47 +18,41 @@
                 @if ($courses->isEmpty())
                     <p>There are no courses to display.</p>
                 @else
-                    <table class="table table-bordered table-striped table-responsive-md">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">Title</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Video</th>
-                                <th scope="col">Start Date</th>
-                                <th scope="col">End Date</th>
-                                <th scope="col">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($courses as $course)
-                                <tr>
-                                    <td>{{ $course->title }}</td>
-                                    <td>{{ $course->description }}</td>
-                                    <td>
-                                        @if($course->video_url)
-                                            <video width="200" controls>
-                                                <source src="{{ $course->video_url }}" type="video/mp4">
-                                                Your browser does not support the video tag.
-                                            </video>
-                                        @else
-                                            <p>No video available</p>
-                                        @endif
-                                    </td>
-                                    <td>{{ $course->start_date }}</td>
-                                    <td>{{ $course->end_date }}</td>
-                                    <td>
-                                        <a href="{{ route('courses.show', $course->id) }}" class="btn btn-info btn-sm">View</a>
-                                        <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                        <form action="{{ route('courses.destroy', $course->id) }}" method="POST" style="display:inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                    <div class="row">
+                        @foreach ($courses as $course)
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title">{{ $course->title }}</h5>
+                                        
+                                        <div class="mb-3">
+                                            @if($course->video_url)
+                                                <video width="100%" controls>
+                                                    <source src="{{ $course->video_url }}" type="video/mp4">
+                                                    Your browser does not support the video tag.
+                                                </video>
+                                            @else
+                                                <p>No video available</p>
+                                            @endif
+                                        </div>
+                                        <p class="card-text">{{ $course->description }}</p>
+                                        <p class="card-text"><small class="text-muted">Start Date: {{ $course->start_date }}</small></p>
+                                        <p class="card-text"><small class="text-muted">End Date: {{ $course->end_date }}</small></p>
+                                        <p class="card-text"><small class="text-muted">Category: </small></p>
+                                        <div class="mt-auto">
+                                            <a href="{{ route('courses.show', $course->id) }}" class="btn btn-info btn-sm">View</a>
+                                            <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                            <form action="{{ route('courses.destroy', $course->id) }}" method="POST" style="display:inline-block;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
                 @endif
             </div>
         </div>

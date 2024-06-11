@@ -9,13 +9,20 @@
         <div class="overflow-hidden shadow sm:rounded-lg">
             <div class="p-6 bg-white border-b border-gray-200">
                 <div class="mb-4">
-                    <p><strong>Title:</strong> {{ $course->title }}</p>
+                    <p><strong>{{ $course->title }}</strong></p>
                 </div>
-                <div class="mb-4">  @if($course->video_url)
-        <p><strong>Video:</strong> <a href="{{ $course->video_url }}" target="_blank">{{ $course->video_url }}</a></p>
-    @endif</div>
+                <div class="mb-3">
+                    @if($course->video_url)
+                        <video width="100%" controls>
+                            <source src="{{ $course->video_url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    @else
+                        <p>No video available</p>
+                    @endif
+                </div>
                 <div class="mb-4">
-                    <p><strong>Description:</strong> {{ $course->description }}</p>
+                    <p><strong>{{ $course->description }}</strong></p>
                 </div>
                 <div class="mb-4">
                     <p><strong>Start Date:</strong> {{ $course->start_date }}</p>

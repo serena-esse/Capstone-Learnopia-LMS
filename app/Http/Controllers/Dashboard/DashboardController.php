@@ -1,13 +1,22 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\Course;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-        public function index()
+    public function index()
     {
-        return view('dashboard');
+        // Recupera i corsi dell'utente autenticato
+        $courses = Course::where('id', Auth::id())->get();
+        
+        // Passa i dati alla vista
+        return view('dashboard', [
+            'courses' => $courses
+        ]);
     }
 }

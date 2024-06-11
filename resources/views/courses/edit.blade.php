@@ -33,6 +33,17 @@
                             <label for="end_date" class="form-label">End Date:</label>
                             <input type="date" class="form-control" id="end_date" name="end_date" value="{{ $course->end_date }}" required>
                         </div>
+                        <!-- Categories -->
+        <div class="form-group">
+            <label for="categories">Categories</label>
+            <select multiple class="form-control" id="categories" name="categories[]">
+                @foreach ($categories as $category)
+                    <option value="{{ $category->id }}" {{ $course->categories->contains($category->id) ? 'selected' : '' }}>
+                        {{ $category->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
                         <button type="submit" class="btn btn-primary">Update</button>
                     </form>
                 </div>

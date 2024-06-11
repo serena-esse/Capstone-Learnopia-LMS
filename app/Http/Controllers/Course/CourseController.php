@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Course;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use PhpParser\Node\Stmt\Expression;
 
 class CourseController extends Controller
 {
@@ -20,8 +20,7 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $courses = Course::where("users_id",Auth::user()->id)->get();
-        // dd($courses);
+        $courses = Course::where('users_id', Auth::user()->id)->get();
         return view('courses.index', ['courses' => $courses]);
     }
 
@@ -30,7 +29,8 @@ class CourseController extends Controller
      */
     public function create()
     {
-        return view('courses.create');
+        $categories = Category::all();
+        return view('courses.create', ['categories' => $categories]);
     }
 
     /**
@@ -38,28 +38,32 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        //separate request
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'video_url' => 'nullable|url',
+            'categories' => 'array|nullable', // Validate categories as an array if provided
         ]);
-        // $user_id = Auth::user()->id;
-        try{
-        $course = new  Course();
-        $course->title = $request['title'];
-        $course->description = $request['description'];
-        $course->start_date = $request['start_date'];
-        $course->end_date = $request['end_date'];
-        $course->video_url = $request->video_url;
-        $course->users_id = Auth::user()->id;
-        $course->save();
-        return redirect()->route('courses.index')->with('success', 'Course created successfully.');
-        }
-        catch(\Exception $e){
-            dd($e->getMessage());
+
+        try {
+            $course = new Course();
+            $course->title = $request['title'];
+            $course->description = $request['description'];
+            $course->start_date = $request['start_date'];
+            $course->end_date = $request['end_date'];
+            $course->video_url = $request->video_url;
+            $course->users_id = Auth::user()->id;
+            $course->save();
+
+            if ($request->has('categories')) {
+                $course->categories()->attach($request['categories']);
+            }
+
+            return redirect()->route('courses.index')->with('success', 'Course created successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
         }
     }
 
@@ -76,7 +80,8 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
-        return view('courses.edit', ['course' => $course]);
+        $categories = Category::all();
+        return view('courses.edit', ['course' => $course, 'categories' => $categories]);
     }
 
     /**
@@ -90,10 +95,20 @@ class CourseController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'video_url' => 'nullable|url',
+            'categories' => 'array|nullable', // Validate categories as an array if provided
         ]);
 
-        $course->update($request->all());
-        return redirect()->route('courses.index')->with('success', 'Course updated successfully.');
+        try {
+            $course->update($request->all());
+
+            if ($request->has('categories')) {
+                $course->categories()->sync($request['categories']);
+            }
+
+            return redirect()->route('courses.index')->with('success', 'Course updated successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        }
     }
 
     /**
