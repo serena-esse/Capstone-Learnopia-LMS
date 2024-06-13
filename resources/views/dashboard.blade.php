@@ -12,7 +12,7 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h3 class="text-lg font-semibold mb-4">{{ __('Your Courses') }}</h3>
                     <!-- Elenco dei corsi -->
-                    <row>
+                    <div class="row">
                         @foreach($courses as $course)
                             <div class="col-md-4 mb-4">
                                 <a href="{{ route('courses.show', $course->id) }}" class="text-blue-500">
@@ -37,7 +37,7 @@
                                 </a> - {{ $course->progress }}%
                             </div>
                         @endforeach
-                    </row>
+                        </div>
                 </div>
             </div>
 

@@ -12,7 +12,7 @@ class DashboardController extends Controller
     public function index()
     {
         // Recupera i corsi dell'utente autenticato
-        $courses = Course::where('id', Auth::id())->get();
+        $courses = Course::where('users_id', Auth::id())->get();
         
         // Passa i dati alla vista
         return view('dashboard', [

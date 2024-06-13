@@ -1,7 +1,11 @@
 <?php
 
+// routes/web.php
+
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Course\CourseController;
+use App\Http\Controllers\LessonController;
+use App\Http\Controllers\QuizController;
 use App\Http\Controllers\Contact\ContactController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +29,9 @@ Route::post('/contact', [ContactController::class, 'submitContactForm'])->name('
 
 Route::middleware('auth')->group(function () {
     Route::resource('courses', CourseController::class);
+    Route::resource('courses.lessons', LessonController::class);
+    Route::resource('courses.quizzes', QuizController::class);
 });
 
 require __DIR__.'/auth.php';
+

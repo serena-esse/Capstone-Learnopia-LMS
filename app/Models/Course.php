@@ -1,5 +1,7 @@
 <?php
 
+// app/Models/Course.php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -27,5 +29,15 @@ class Course extends Model
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'category_course');
+    }
+
+    public function lessons()
+    {
+        return $this->hasMany(Lesson::class);
+    }
+
+    public function quizzes()
+    {
+        return $this->hasMany(Quiz::class);
     }
 }

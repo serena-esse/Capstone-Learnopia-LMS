@@ -31,18 +31,7 @@
                             <div class="form-group">
                                 <label for="end_date">End Date:</label>
                                 <input type="date" class="form-control" id="end_date" name="end_date" required>
-                            
                             </div>
-
-                             <!-- Categories -->
-        <div class="form-group">
-            <label for="categories">Categories</label>
-            <select multiple class="form-control" id="categories" name="categories[]">
-                @foreach ($categories as $category)
-                    <option value="{{ $category->id }}">{{ $category->name }}</option>
-                @endforeach
-            </select>
-        </div>
                             <button type="submit" class="btn btn-primary">Create</button>
                         </form>
                     </div>

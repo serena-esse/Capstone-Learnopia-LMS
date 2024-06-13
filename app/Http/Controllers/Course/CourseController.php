@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Course;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
-use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,8 +28,7 @@ class CourseController extends Controller
      */
     public function create()
     {
-        $categories = Category::all();
-        return view('courses.create', ['categories' => $categories]);
+        return view('courses.create');
     }
 
     /**
@@ -44,7 +42,6 @@ class CourseController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'video_url' => 'nullable|url',
-            'categories' => 'array|nullable', // Validate categories as an array if provided
         ]);
 
         try {
@@ -57,10 +54,6 @@ class CourseController extends Controller
             $course->users_id = Auth::user()->id;
             $course->save();
 
-            if ($request->has('categories')) {
-                $course->categories()->attach($request['categories']);
-            }
-
             return redirect()->route('courses.index')->with('success', 'Course created successfully.');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);
@@ -72,6 +65,8 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
+        // Load lessons and quizzes relationships
+        $course->load('lessons', 'quizzes');
         return view('courses.show', ['course' => $course]);
     }
 
@@ -80,8 +75,7 @@ class CourseController extends Controller
      */
     public function edit(Course $course)
     {
-        $categories = Category::all();
-        return view('courses.edit', ['course' => $course, 'categories' => $categories]);
+        return view('courses.edit', ['course' => $course]);
     }
 
     /**
@@ -95,15 +89,10 @@ class CourseController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'video_url' => 'nullable|url',
-            'categories' => 'array|nullable', // Validate categories as an array if provided
         ]);
 
         try {
             $course->update($request->all());
-
-            if ($request->has('categories')) {
-                $course->categories()->sync($request['categories']);
-            }
 
             return redirect()->route('courses.index')->with('success', 'Course updated successfully.');
         } catch (\Exception $e) {
