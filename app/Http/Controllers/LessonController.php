@@ -1,7 +1,4 @@
 <?php
-
-// app/Http/Controllers/LessonController.php
-
 namespace App\Http\Controllers;
 
 use App\Models\Lesson;
@@ -13,52 +10,48 @@ class LessonController extends Controller
     public function index(Course $course)
     {
         $lessons = $course->lessons;
-        return view('lessons.index', ['course' => $course, 'lessons' => $lessons]);
+        return view('courses.show', compact('lessons', 'course'));
     }
 
     public function create(Course $course)
     {
-        return view('lessons.create', ['course' => $course]);
+        return view('lessons.create', compact('course'));
     }
 
     public function store(Request $request, Course $course)
     {
-        $request->validate([
+        $validatedData = $request->validate([
+            'video_url' => 'nullable|url',
             'title' => 'required|string|max:255',
             'content' => 'required|string',
         ]);
 
-        $course->lessons()->create($request->all());
+        $course->lessons()->create($validatedData);
 
-        return redirect()->route('courses.show', $course)->with('success', 'Lesson added successfully.');
-    }
-
-    public function show(Course $course, Lesson $lesson)
-    {
-        return view('lessons.show', ['course' => $course, 'lesson' => $lesson]);
+        return redirect()->route('courses.lessons.index', $course)->with('success', 'Lesson created successfully.');
     }
 
     public function edit(Course $course, Lesson $lesson)
     {
-        return view('lessons.edit', ['course' => $course, 'lesson' => $lesson]);
+        return view('lessons.edit', compact('lesson', 'course'));
     }
 
     public function update(Request $request, Course $course, Lesson $lesson)
     {
-        $request->validate([
+        $validatedData = $request->validate([
+            'video_url' => 'nullable|url',
             'title' => 'required|string|max:255',
             'content' => 'required|string',
         ]);
 
-        $lesson->update($request->all());
+        $lesson->update($validatedData);
 
-        return redirect()->route('courses.show', $course)->with('success', 'Lesson updated successfully.');
+        return redirect()->route('courses.lessons.index', $course)->with('success', 'Lesson updated successfully.');
     }
 
     public function destroy(Course $course, Lesson $lesson)
     {
         $lesson->delete();
-
-        return redirect()->route('courses.show', $course)->with('success', 'Lesson deleted successfully.');
+        return redirect()->route('courses.lessons.index', $course)->with('success', 'Lesson deleted successfully.');
     }
 }

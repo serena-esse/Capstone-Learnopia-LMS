@@ -1,5 +1,4 @@
 <?php
-
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\LessonController;

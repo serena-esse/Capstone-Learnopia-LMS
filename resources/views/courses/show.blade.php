@@ -1,5 +1,3 @@
-<!-- resources/views/courses/show.blade.php -->
-
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -45,19 +43,36 @@
                 @if($course->lessons->isEmpty())
                     <p>No lessons available.</p>
                 @else
-                    <ul>
+                    <div class="row">
                         @foreach($course->lessons as $lesson)
-                            <li class="mb-2">
-                                <a href="{{ route('courses.lessons.show', [$course, $lesson]) }}" class="text-blue-500">{{ $lesson->title }}</a>
-                                <a href="{{ route('courses.lessons.edit', [$course, $lesson]) }}" class="btn btn-warning btn-sm ml-2">Edit</a>
-                                <form action="{{ route('courses.lessons.destroy', [$course, $lesson]) }}" method="POST" class="inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                </form>
-                            </li>
+                            <div class="col-md-4 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-body d-flex flex-column">
+                                        <a href="{{ route('courses.lessons.show', [$course, $lesson]) }}" class="text-blue-500">{{ $lesson->title }}</a>
+                                        <div>
+                                            @if($lesson->video_url)
+                                                <video width="600" controls>
+                                                    <source src="{{ $lesson->video_url }}" type="video/mp4">
+                                                    Your browser does not support the video tag.
+                                                </video>
+                                            @endif
+                                        </div>
+                                        <div>
+                                            {!! nl2br(e($lesson->content)) !!}
+                                        </div>
+                                        <div class="mt-auto">
+                                            <a href="{{ route('courses.lessons.edit', [$course, $lesson]) }}" class="btn btn-warning btn-sm">Edit</a>
+                                            <form action="{{ route('courses.lessons.destroy', [$course, $lesson]) }}" method="POST" class="inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         @endforeach
-                    </ul>
+                    </div>
                 @endif
             </div>
         </div>

@@ -1,6 +1,4 @@
-<!-- resources/views/lessons/create.blade.php -->
 <x-app-layout>
-
     <div class="container">
         <h1>Create New Lesson for {{ $course->title }}</h1>
 
@@ -16,15 +14,19 @@
 
         <form action="{{ route('courses.lessons.store', $course) }}" method="POST">
             @csrf
-            <div class="mb-3">
-                <label for="title" class="form-label">Title</label>
-                <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}">
+            <div>
+                <label for="video_url">Video URL</label>
+                <input type="url" name="video_url" id="video_url">
             </div>
-            <div class="mb-3">
-                <label for="content" class="form-label">Content</label>
-                <textarea class="form-control" id="content" name="content" rows="5">{{ old('content') }}</textarea>
+            <div>
+                <label for="title">Title</label>
+                <input type="text" name="title" id="title" required>
             </div>
-            <button type="submit" class="btn btn-primary">Create Lesson</button>
+            <div>
+                <label for="content">Content</label>
+                <textarea name="content" id="content" required></textarea>
+            </div>
+            <button type="submit">Save Lesson</button>
         </form>
     </div>
 </x-app-layout>
