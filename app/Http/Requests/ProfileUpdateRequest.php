@@ -1,5 +1,7 @@
 <?php
 
+// app/Http/Requests/ProfileUpdateRequest.php
+
 namespace App\Http\Requests;
 
 use App\Models\User;
@@ -18,6 +20,7 @@ class ProfileUpdateRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
+            'profile_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'], // Added validation for profile image
         ];
     }
 }

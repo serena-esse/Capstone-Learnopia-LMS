@@ -8,7 +8,13 @@
             {{ __("Update your account's profile information and email address.") }}
         </p>
     </header>
+    <div class="mt-4">
+        <x-input-label for="profile_image" :value="__('Profile Image')" />
 
+        <x-input-label id="profile_image" class="block mt-1 w-full" type="file" name="profile_image" />
+    </div>
+
+    
     <form id="send-verification" method="post" action="{{ route('verification.send') }}">
         @csrf
     </form>

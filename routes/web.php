@@ -1,7 +1,5 @@
 <?php
 
-// routes/web.php
-
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\LessonController;
@@ -29,9 +27,28 @@ Route::post('/contact', [ContactController::class, 'submitContactForm'])->name('
 
 Route::middleware('auth')->group(function () {
     Route::resource('courses', CourseController::class);
-    Route::resource('courses.lessons', LessonController::class);
-    Route::resource('courses.quizzes', QuizController::class);
+
+    Route::prefix('courses/{course}')->group(function () {
+        Route::resource('lessons', LessonController::class)->names([
+            'index' => 'courses.lessons.index',
+            'create' => 'courses.lessons.create',
+            'store' => 'courses.lessons.store',
+            'show' => 'courses.lessons.show',
+            'edit' => 'courses.lessons.edit',
+            'update' => 'courses.lessons.update',
+            'destroy' => 'courses.lessons.destroy',
+        ]);
+
+        Route::resource('quizzes', QuizController::class)->names([
+            'index' => 'courses.quizzes.index',
+            'create' => 'courses.quizzes.create',
+            'store' => 'courses.quizzes.store',
+            'show' => 'courses.quizzes.show',
+            'edit' => 'courses.quizzes.edit',
+            'update' => 'courses.quizzes.update',
+            'destroy' => 'courses.quizzes.destroy',
+        ]);
+    });
 });
 
 require __DIR__.'/auth.php';
-

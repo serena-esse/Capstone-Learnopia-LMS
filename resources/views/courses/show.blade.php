@@ -49,6 +49,12 @@
                         @foreach($course->lessons as $lesson)
                             <li class="mb-2">
                                 <a href="{{ route('courses.lessons.show', [$course, $lesson]) }}" class="text-blue-500">{{ $lesson->title }}</a>
+                                <a href="{{ route('courses.lessons.edit', [$course, $lesson]) }}" class="btn btn-warning btn-sm ml-2">Edit</a>
+                                <form action="{{ route('courses.lessons.destroy', [$course, $lesson]) }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
                             </li>
                         @endforeach
                     </ul>
