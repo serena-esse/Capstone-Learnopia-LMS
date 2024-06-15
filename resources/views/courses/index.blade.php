@@ -24,21 +24,13 @@
                                 <div class="card h-100">
                                     <div class="card-body d-flex flex-column">
                                         <h5 class="card-title">{{ $course->title }}</h5>
-                                        
-                                        <div class="mb-3">
-                                            @if($course->video_url)
-                                                <video width="100%" controls>
-                                                    <source src="{{ $course->video_url }}" type="video/mp4">
-                                                    Your browser does not support the video tag.
-                                                </video>
-                                            @else
-                                                <p>No video available</p>
-                                            @endif
-                                        </div>
+                                        <!-- Display the course image if it exists -->
+                                        @if($course->image)
+                                            <img src="{{ asset('images/' . $course->image) }}" alt="{{ $course->title }}" class="img-fluid mb-3">
+                                        @endif
                                         <p class="card-text">{{ $course->description }}</p>
                                         <p class="card-text"><small class="text-muted">Start Date: {{ $course->start_date }}</small></p>
                                         <p class="card-text"><small class="text-muted">End Date: {{ $course->end_date }}</small></p>
-                                        <p class="card-text"><small class="text-muted">Category: </small></p>
                                         <div class="mt-auto">
                                             <a href="{{ route('courses.show', $course->id) }}" class="btn btn-info btn-sm">View</a>
                                             <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-warning btn-sm">Edit</a>

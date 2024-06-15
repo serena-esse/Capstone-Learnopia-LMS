@@ -33,7 +33,8 @@ class LessonController extends Controller
 
     public function edit(Course $course, Lesson $lesson)
     {
-        return view('lessons.edit', compact('lesson', 'course'));
+        $courses = Course::all(); // Retrieve all courses
+        return view('lessons.edit', compact('lesson', 'course', 'courses'));
     }
 
     public function update(Request $request, Course $course, Lesson $lesson)
@@ -53,5 +54,10 @@ class LessonController extends Controller
     {
         $lesson->delete();
         return redirect()->route('courses.lessons.index', $course)->with('success', 'Lesson deleted successfully.');
+    }
+
+    public function show(Course $course, Lesson $lesson)
+    {
+        return view('lessons.show', compact('lesson', 'course'));
     }
 }

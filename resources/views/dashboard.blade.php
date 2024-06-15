@@ -16,32 +16,28 @@
                         @foreach($courses as $course)
                             <div class="col-md-4 mb-4">
                                 <a href="{{ route('courses.show', $course->id) }}" class="text-blue-500">
-                                    {{ $course->title }}
-                                    <div class="card-body d-flex flex-column">
-                                                                               
-                                        <div class="mb-3">
-                                            @if($course->video_url)
-                                                <video width="100%" controls>
-                                                    <source src="{{ $course->video_url }}" type="video/mp4">
-                                                    Your browser does not support the video tag.
-                                                </video>
-                                            @else
-                                                <p>No video available</p>
+                                    <div class="card h-100">
+                                        <div class="card-body d-flex flex-column">
+                                            <h5 class="card-title">{{ $course->title }}</h5>
+                                            <!-- Display the course image if it exists -->
+                                            @if($course->image)
+                                                <img src="{{ asset('images/' . $course->image) }}" alt="{{ $course->title }}" class="img-fluid mb-3">
                                             @endif
+                                            <p class="card-text">{{ $course->description }}</p>
+                                            <p class="card-text"><small class="text-muted">Start Date: {{ $course->start_date }}</small></p>
+                                            <p class="card-text"><small class="text-muted">End Date: {{ $course->end_date }}</small></p>
+                                            <div class="mt-auto">
+                                                <span>{{ $course->progress }}%</span>
+                                            </div>
                                         </div>
-                                        <p class="card-text">{{ $course->description }}</p>
-                                        <p class="card-text"><small class="text-muted">Start Date: {{ $course->start_date }}</small></p>
-                                        <p class="card-text"><small class="text-muted">End Date: {{ $course->end_date }}</small></p>
-                                        
                                     </div>
-                                </a> - {{ $course->progress }}%
+                                </a>
                             </div>
                         @endforeach
-                        </div>
+                    </div>
                 </div>
             </div>
 
-          
             <!-- Azioni rapide -->
             <div class="dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
@@ -50,8 +46,7 @@
                         <a href="{{ route('courses.create') }}" class="dark:bg-gray-700 p-4 rounded-lg text-center">
                             {{ __('Create New Course') }}
                         </a>
-                       
-                                           </div>
+                    </div>
                 </div>
             </div>
         </div>

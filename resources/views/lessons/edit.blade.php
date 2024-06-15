@@ -12,7 +12,7 @@
             </div>
         @endif
 
-        <form action="{{ route('lessons.update', $lesson) }}" method="POST">
+        <form action="{{ route('courses.lessons.update', ['course' => $lesson->course_id, 'lesson' => $lesson]) }}" method="POST">
             @csrf
             @method('PUT')
             <div>
@@ -25,17 +25,11 @@
             </div>
             <div>
                 <label for="video_url">Video URL</label>
-                <input type="url" name="video_url" id="video_url" value="{{ $lesson->video_url }}">
+                <input type="url" name="video_url" id="video_url" value="{{ $lesson->video_url }}" required>
             </div>
             <div>
-                <label for="title">Title</label>
-                <input type="text" name="title" id="title" value="{{ $lesson->title }}" required>
+                <button type="submit">Update Lesson</button>
             </div>
-            <div>
-                <label for="content">Content</label>
-                <textarea name="content" id="content" required>{{ $lesson->content }}</textarea>
-            </div>
-            <button type="submit">Update Lesson</button>
         </form>
     </div>
 </x-app-layout>

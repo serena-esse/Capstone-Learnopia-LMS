@@ -10,15 +10,15 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
-                        <form action="{{ route('courses.store') }}" method="POST">
+                        <form action="{{ route('courses.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
                                 <label for="title">Title:</label>
                                 <input type="text" class="form-control" id="title" name="title" required>
                             </div>
                             <div class="form-group">
-                                <label for="video_url">Video URL:</label>
-                                <input type="url" class="form-control" name="video_url" id="video_url" value="">
+                                <label for="image">Image</label>
+                                <input type="file" class="form-control-file" name="image" id="image">
                             </div>
                             <div class="form-group">
                                 <label for="description">Description:</label>

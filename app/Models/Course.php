@@ -16,9 +16,8 @@ class Course extends Model
         'description',
         'start_date',
         'end_date',
-        'video_url',
-        'progress',
-        'users_id'  
+        'image',
+        'users_id',
     ];
 
     public function user()
@@ -26,10 +25,7 @@ class Course extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function categories()
-    {
-        return $this->belongsToMany(Category::class, 'category_course');
-    }
+   
 
     public function lessons()
     {

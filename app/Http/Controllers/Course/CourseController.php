@@ -1,11 +1,15 @@
 <?php
 
+// app/Http/Controllers/Course/CourseController.php
+
 namespace App\Http\Controllers\Course;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+
 
 class CourseController extends Controller
 {
@@ -14,73 +18,80 @@ class CourseController extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $courses = Course::where('users_id', Auth::user()->id)->get();
         return view('courses.index', ['courses' => $courses]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('courses.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'video_url' => 'nullable|url',
+{
+    // Validazione dei dati di input
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'description' => 'required|string',
+        'start_date' => 'required|date',
+        'end_date' => 'required|date|after_or_equal:start_date',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
+
+    try {
+        // Creazione di una nuova istanza di Course
+        $course = new Course();
+        $course->title = $request['title'];
+        $course->description = $request['description'];
+        $course->start_date = $request['start_date'];
+        $course->end_date = $request['end_date'];
+        $course->users_id = Auth::user()->id;
+
+        Log::info('Course data prepared for saving', [
+            'title' => $course->title,
+            'description' => $course->description,
+            'start_date' => $course->start_date,
+            'end_date' => $course->end_date,
+            'users_id' => $course->users_id
         ]);
 
-        try {
-            $course = new Course();
-            $course->title = $request['title'];
-            $course->description = $request['description'];
-            $course->start_date = $request['start_date'];
-            $course->end_date = $request['end_date'];
-            $course->video_url = $request->video_url;
-            $course->users_id = Auth::user()->id;
-            $course->save();
-
-            return redirect()->route('courses.index')->with('success', 'Course created successfully.');
-        } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => $e->getMessage()]);
+        // Verifica e salvataggio dell'immagine
+        if ($request->hasFile('image')) {
+            $imageName = time().'.'.$request->image->extension();
+            $request->image->move(public_path('images'), $imageName);
+            $course->image = $imageName;
+            Log::info('Image uploaded successfully', ['image' => $course->image]);
         }
-    }
 
-    /**
-     * Display the specified resource.
-     */
+        // Salvataggio del corso nel database
+        $course->save();
+        Log::info('Course saved successfully', ['course_id' => $course->id]);
+
+        // Redirect alla pagina dei corsi
+        return redirect()->route('courses.index')->with('success', 'Course created successfully.');
+    } catch (\Exception $e) {
+        // Log dell'errore
+        Log::error('Error creating course: ' . $e->getMessage());
+
+        // Redirect con messaggio di errore
+        return redirect()->back()->withErrors(['error' => 'Failed to create course. Please try again.']);
+    }
+}
+
+
     public function show(Course $course)
     {
-        // Load lessons and quizzes relationships
         $course->load('lessons', 'quizzes');
         return view('courses.show', ['course' => $course]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Course $course)
     {
         return view('courses.edit', ['course' => $course]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Course $course)
     {
         $request->validate([
@@ -88,11 +99,22 @@ class CourseController extends Controller
             'description' => 'required|string',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'video_url' => 'nullable|url',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         try {
-            $course->update($request->all());
+            $course->title = $request['title'];
+            $course->description = $request['description'];
+            $course->start_date = $request['start_date'];
+            $course->end_date = $request['end_date'];
+
+            if ($request->hasFile('image')) {
+                $imageName = time().'.'.$request->image->extension();
+                $request->image->move(public_path('images'), $imageName);
+                $course->image = $imageName;
+            }
+
+            $course->save();
 
             return redirect()->route('courses.index')->with('success', 'Course updated successfully.');
         } catch (\Exception $e) {
@@ -100,9 +122,6 @@ class CourseController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Course $course)
     {
         $course->delete();

@@ -11,16 +11,12 @@
                 <div class="mb-4">
                     <p><strong>{{ $course->title }}</strong></p>
                 </div>
-                <div class="mb-3">
-                    @if($course->video_url)
-                        <video width="100%" controls>
-                            <source src="{{ $course->video_url }}" type="video/mp4">
-                            Your browser does not support the video tag.
-                        </video>
-                    @else
-                        <p>No video available</p>
-                    @endif
+                @if ($course->image)
+                <div>
+                    <img src="{{ asset('images/' . $course->image) }}" alt="{{ $course->title }}" width="600">
                 </div>
+            @endif
+            
                 <div class="mb-4">
                     <p><strong>{{ $course->description }}</strong></p>
                 </div>
@@ -49,18 +45,18 @@
                                 <div class="card h-100">
                                     <div class="card-body d-flex flex-column">
                                         <a href="{{ route('courses.lessons.show', [$course, $lesson]) }}" class="text-blue-500">{{ $lesson->title }}</a>
-                                        <div>
-                                            @if($lesson->video_url)
-                                                <video width="600" controls>
-                                                    <source src="{{ $lesson->video_url }}" type="video/mp4">
-                                                    Your browser does not support the video tag.
-                                                </video>
-                                            @endif
-                                        </div>
+                                        @if ($lesson->video_url)
+                                            <div class="video-container">
+                                                <iframe width="560" height="315" src="{{ $lesson->video_url }}" frameborder="0" allowfullscreen></iframe>
+                                            </div>
+                                        @else
+                                            <p>No video available</p>
+                                        @endif
                                         <div>
                                             {!! nl2br(e($lesson->content)) !!}
                                         </div>
                                         <div class="mt-auto">
+                                            <a href="{{ route('courses.lessons.show', [$course, $lesson]) }}" class="btn btn-warning btn-sm">View</a>
                                             <a href="{{ route('courses.lessons.edit', [$course, $lesson]) }}" class="btn btn-warning btn-sm">Edit</a>
                                             <form action="{{ route('courses.lessons.destroy', [$course, $lesson]) }}" method="POST" class="inline">
                                                 @csrf
@@ -97,4 +93,22 @@
             </div>
         </div>
     </div>
+
+    <style>
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 </x-app-layout>

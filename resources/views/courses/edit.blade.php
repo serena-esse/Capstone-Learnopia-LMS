@@ -16,11 +16,15 @@
                             <label for="title" class="form-label">Title:</label>
                             <input type="text" class="form-control" id="title" name="title" value="{{ $course->title }}" required>
                         </div>
-                        <div class="mb-3">
-                            <label for="video_url" class="form-label">Video URL:</label>
-                            <input type="url" class="form-control" name="video_url" id="video_url" value="{{ $course->video_url }}">
+                        <div>
+                            <label for="image">Image</label>
+                            <input type="file" name="image" id="image">
+                            @if ($course->image)
+                                <div>
+                                    <img src="{{ asset('images/' . $course->image) }}" alt="{{ $course->title }}" width="200">
+                                </div>
+                            @endif
                         </div>
-
                         <div class="mb-3">
                             <label for="description" class="form-label">Description:</label>
                             <textarea class="form-control" id="description" name="description" required>{{ $course->description }}</textarea>
@@ -33,17 +37,8 @@
                             <label for="end_date" class="form-label">End Date:</label>
                             <input type="date" class="form-control" id="end_date" name="end_date" value="{{ $course->end_date }}" required>
                         </div>
-                        <!-- Categories -->
-        <div class="form-group">
-            <label for="categories">Categories</label>
-            <select multiple class="form-control" id="categories" name="categories[]">
-                @foreach ($categories as $category)
-                    <option value="{{ $category->id }}" {{ $course->categories->contains($category->id) ? 'selected' : '' }}>
-                        {{ $category->name }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+                        
+     
                         <button type="submit" class="btn btn-primary">Update</button>
                     </form>
                 </div>
