@@ -1,7 +1,4 @@
 <?php
-
-// app/Http/Controllers/ProfileController.php
-
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
@@ -11,12 +8,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display the user's profile form.
-     */
     public function edit(Request $request): View
     {
         return view('profile.edit', [
@@ -24,20 +19,27 @@ class ProfileController extends Controller
         ]);
     }
 
-    /**
-     * Update the user's profile information.
-     */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
         $user = $request->user();
         $data = $request->validated();
 
+        // Validate the uploaded file
+        $request->validate([
+            'profile_image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048', // 2MB max
+        ]);
+
         if ($request->hasFile('profile_image')) {
-            if ($user->profile_image) {
-                Storage::disk('public')->delete($user->profile_image);
-            }
+            Log::info('File caricato, iniziando il salvataggio.');
+
+            // Store the file in the 'profile_images' disk
             $path = $request->file('profile_image')->store('profile_images', 'public');
-            $data['profile_image'] = $path;
+            Log::info('Immagine profilo salvata in:', ['path' => $path]);
+
+            // Save the path without 'public/storage/' prefix
+            $data['profile_image'] = basename($path);
+        } else {
+            Log::error('File non caricato correttamente.');
         }
 
         $user->fill($data);
@@ -51,9 +53,6 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
-    /**
-     * Delete the user's account.
-     */
     public function destroy(Request $request): RedirectResponse
     {
         $request->validateWithBag('userDeletion', [
