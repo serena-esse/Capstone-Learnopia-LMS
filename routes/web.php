@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\LessonController;
@@ -27,7 +28,9 @@ Route::post('/contact', [ContactController::class, 'submitContactForm'])->name('
 Route::middleware('auth')->group(function () {
     Route::resource('courses', CourseController::class);
 
+    // Definizione delle risorse annidate per le lezioni e i quiz
     Route::prefix('courses/{course}')->group(function () {
+        // Lezioni
         Route::resource('lessons', LessonController::class)->names([
             'index' => 'courses.lessons.index',
             'create' => 'courses.lessons.create',
@@ -38,6 +41,7 @@ Route::middleware('auth')->group(function () {
             'destroy' => 'courses.lessons.destroy',
         ]);
 
+        // Quiz
         Route::resource('quizzes', QuizController::class)->names([
             'index' => 'courses.quizzes.index',
             'create' => 'courses.quizzes.create',

@@ -82,9 +82,13 @@ class CourseController extends Controller
 
 
     public function show(Course $course)
+   
     {
-        $course->load('lessons', 'quizzes');
-        return view('courses.show', ['course' => $course]);
+        // Carica tutti i quiz associati al corso
+        $quizzes = $course->quizzes()->get();
+        
+        // Passa i dati del corso e dei quiz alla vista 'courses.show'
+        return view('courses.show', compact('course', 'quizzes'));
     }
 
     public function edit(Course $course)
