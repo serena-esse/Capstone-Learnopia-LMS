@@ -10,8 +10,11 @@ class CreateQuestionsTable extends Migration
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('quiz_id')->constrained()->onDelete('cascade');
+            $table->string('question');
+            $table->json('options');
+            $table->unsignedInteger('correct_answer');
             $table->unsignedBigInteger('correct_answer_id')->nullable();
-            
+
             $table->foreign('correct_answer_id')
                   ->references('id')
                   ->on('answers')

@@ -6,6 +6,7 @@ use App\Models\Course;
 use App\Models\Quiz;
 use App\Models\Question;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class QuizController extends Controller
 {
@@ -44,50 +45,44 @@ class QuizController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request, Course $course)
-{
-    // Validazione dei dati inviati dal form
-    $request->validate([
-        'title' => 'required|string|max:255',
-        'questions' => 'required|array|min:1',
-        'questions.*.question' => 'required|string|max:255',
-        'questions.*.options' => 'required|array|min:2',
-        'questions.*.correct_answer' => 'required|integer|min:0',
-    ]);
+    {
+        // Validazione dei dati
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'questions' => 'required|array|min:1',
+            'questions.*.question' => 'required|string|max:255',
+            'questions.*.options' => 'required|array|min:2',
+            'questions.*.correct_answer' => 'required|integer|min:0',
+        ]);
 
-    // Stampa di debug
-    // dd($request->all());
+        try {
+            // Creazione di un nuovo quiz
+            $quiz = new Quiz();
+            $quiz->title = $validated['title'];
+            $quiz->course_id = $course->id;
+            $quiz->save();
 
-    try {
-        // Creazione di un nuovo quiz
-        $quiz = new Quiz();
-        $quiz->title = $request->input('title');
-        $quiz->course_id = $course->id;
-        $quiz->save();
+            Log::info("Quiz creato con ID: " . $quiz->id);
 
-        // Creazione delle domande associate al quiz
-        foreach ($request->input('questions') as $questionData) {
-            // Debug per verificare il contenuto di $questionData
-            // dd($questionData);
+            // Creazione delle domande associate al quiz
+            foreach ($validated['questions'] as $questionData) {
+                $question = new Question();
+                $question->question = $questionData['question'];
+                $question->options = json_encode($questionData['options']);
+                $question->correct_answer = $questionData['correct_answer'];
+                $question->quiz_id = $quiz->id;
+                $question->save();
 
-            $question = new Question();
-            $question->question = $questionData['question']; // L'errore è qui
-            $question->options = json_encode($questionData['options']);
-            $question->correct_answer = $questionData['correct_answer'];
-            $question->quiz_id = $quiz->id;
-            $question->save();
-        }
+                Log::info("Domanda creata con ID: " . $question->id);
+            }
 
-        // Verifica se le domande sono state create correttamente
-        // dd($quiz->questions);
-
-        // Reindirizza alla pagina di visualizzazione del corso con un messaggio di successo
-        return redirect()->route('courses.show', $course->id)
+            return redirect()->route('courses.show', $course->id)
                              ->with('success', 'Quiz created successfully.');
-    } catch (\Exception $e) {
-        // Se si verifica un'eccezione durante il salvataggio, reindirizza indietro con errori
-        return redirect()->back()->withInput()->withErrors(['error' => 'Failed to create quiz. Please try again.']);
+        } catch (\Exception $e) {
+            Log::error('Errore durante la creazione del quiz: ' . $e->getMessage());
+            return redirect()->back()->withInput()->withErrors(['error' => 'Failed to create quiz. Please try again.']);
+        }
     }
-}
 
 
     /**

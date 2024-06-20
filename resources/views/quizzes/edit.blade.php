@@ -19,7 +19,28 @@
                         <input type="text" class="form-control" id="title" name="title" value="{{ old('title', $quiz->title) }}" required>
                     </div>
 
-                    <!-- Aggiungi qui i campi per le domande e le risposte del quiz, se necessario -->
+                    <!-- Ciclo per visualizzare e modificare le domande -->
+                    @foreach ($quiz->questions as $index => $question)
+                        <div class="form-group">
+                            <label for="question_{{ $index }}">Question {{ $index + 1 }}</label>
+                            <input type="text" class="form-control" id="question_{{ $index }}" name="questions[{{ $index }}][question]" value="{{ old('questions.'.$index.'.question', $question->question) }}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="options_{{ $index }}">Options</label>
+                            @php
+                                $options = json_decode($question->options);
+                            @endphp
+                            @foreach ($options as $optionIndex => $option)
+                                <input type="text" class="form-control mb-2" id="options_{{ $index }}_{{ $optionIndex }}" name="questions[{{ $index }}][options][]" value="{{ old('questions.'.$index.'.options.'.$optionIndex, $option) }}" required>
+                            @endforeach
+                        </div>
+
+                        <div class="form-group">
+                            <label for="correct_answer_{{ $index }}">Correct Answer</label>
+                            <input type="number" class="form-control" id="correct_answer_{{ $index }}" name="questions[{{ $index }}][correct_answer]" value="{{ old('questions.'.$index.'.correct_answer', $question->correct_answer) }}" required>
+                        </div>
+                    @endforeach
 
                     <button type="submit" class="btn btn-primary">Update Quiz</button>
                 </form>
