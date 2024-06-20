@@ -94,11 +94,27 @@ class QuizController extends Controller
      */
     public function show(Course $course, Quiz $quiz)
     {
-        // Carica tutte le domande e le risposte associate al quiz
-        $quiz->load('questions.answers');
-        
-        // Restituisce la vista 'quizzes.show' con il quiz caricato
-        return view('quizzes.show', compact('quiz'));
+        $quiz->load('questions');
+        return view('quizzes.show', compact('course', 'quiz'));
+    }
+
+    // Metodo per gestire le risposte degli utenti e calcolare il punteggio
+    public function submit(Request $request, Course $course, Quiz $quiz)
+    {
+        $validatedData = $request->validate([
+            'answers' => 'required|array',
+            'answers.*' => 'required|integer',
+        ]);
+
+        $score = 0;
+        foreach ($quiz->questions as $index => $question) {
+            if ($validatedData['answers'][$index] == $question->correct_answer) {
+                $score++;
+            }
+        }
+
+        return redirect()->route('courses.quizzes.show', [$course->id, $quiz->id])
+                         ->with('success', "You scored $score out of " . $quiz->questions->count());
     }
 
     /**

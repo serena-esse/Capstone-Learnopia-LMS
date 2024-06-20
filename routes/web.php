@@ -51,6 +51,9 @@ Route::middleware('auth')->group(function () {
             'update' => 'courses.quizzes.update',
             'destroy' => 'courses.quizzes.destroy',
         ]);
+
+        // Rotta per sottomettere le risposte del quiz
+        Route::post('quizzes/{quiz}/submit', [QuizController::class, 'submit'])->name('courses.quizzes.submit');
     });
 });
 
