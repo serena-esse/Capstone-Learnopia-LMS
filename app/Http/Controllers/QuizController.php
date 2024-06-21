@@ -18,10 +18,7 @@ class QuizController extends Controller
      */
     public function index(Course $course)
     {
-        // Ottiene tutti i quiz associati al corso
-        $quizzes = $course->quizzes()->get();
-        
-        // Restituisce la vista 'quizzes.index' con i dati dei quiz e del corso
+        $quizzes = $course->quizzes()->get(); // Retrieve all quizzes associated with the specific course
         return view('quizzes.index', compact('quizzes', 'course'));
     }
 

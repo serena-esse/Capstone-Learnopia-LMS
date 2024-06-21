@@ -29,6 +29,10 @@
                                             <div class="mt-auto">
                                                 <span>{{ $course->progress }}%</span>
                                             </div>
+                                            <form action="{{ route('courses.enroll', $course) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Enroll in this course</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </a>

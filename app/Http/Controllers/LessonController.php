@@ -9,8 +9,8 @@ class LessonController extends Controller
 {
     public function index(Course $course)
     {
-        $lessons = $course->lessons;
-        return view('courses.show', compact('lessons', 'course'));
+        $courses = Course::with('lessons')->get(); // Retrieve all courses with their associated lessons
+        return view('courses.show', compact('courses'));
     }
 
     public function create(Course $course)

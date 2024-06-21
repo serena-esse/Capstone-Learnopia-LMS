@@ -1,7 +1,5 @@
 <?php
 
-// app/Models/Course.php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,27 +9,25 @@ class Course extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'title',
-        'description',
-        'start_date',
-        'end_date',
-        'image',
-        'users_id',
-    ];
-
-    public function user()
+    /**
+     * The users that belong to the course.
+     */
+    public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(User::class, 'course_user');
     }
 
-   
-
+    /**
+     * The lessons that belong to the course.
+     */
     public function lessons()
     {
         return $this->hasMany(Lesson::class);
     }
 
+    /**
+     * The quizzes that belong to the course.
+     */
     public function quizzes()
     {
         return $this->hasMany(Quiz::class);

@@ -39,6 +39,10 @@
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
                                             </form>
+                                            <form action="{{ route('courses.enroll', $course) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Enroll in this course</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
