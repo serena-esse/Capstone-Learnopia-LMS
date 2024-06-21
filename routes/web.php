@@ -1,5 +1,7 @@
 <?php
 
+
+
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\LessonController;
@@ -12,45 +14,55 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+Route::middleware(['auth', 'verified'])->group(function () {
 
-Route::middleware('auth')->group(function () {
+    // Rotte per tutti gli utenti autenticati
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
 
-Route::get('/contact', [ContactController::class, 'showContactForm'])->name('contact.form');
-Route::post('/contact', [ContactController::class, 'submitContactForm'])->name('contact.submit');
+    Route::get('/contact', [ContactController::class, 'showContactForm'])->name('contact.form');
+    Route::post('/contact', [ContactController::class, 'submitContactForm'])->name('contact.submit');
 
-Route::middleware('auth')->group(function () {
-    Route::resource('courses', CourseController::class);
+    // Rotte accessibili solo agli admin e teacher per la creazione di corsi
+    Route::middleware('role:admin,teacher')->group(function () {
+        Route::get('courses/create', [CourseController::class, 'create'])->name('courses.create');
+        Route::post('courses', [CourseController::class, 'store'])->name('courses.store');
+        Route::get('courses/{course}/edit', [CourseController::class, 'edit'])->name('courses.edit');
+        Route::patch('courses/{course}', [CourseController::class, 'update'])->name('courses.update');
+        Route::delete('courses/{course}', [CourseController::class, 'destroy'])->name('courses.destroy');
+    });
+
+    // Rotte per la gestione dei corsi, accessibili a tutti gli utenti autenticati
+    Route::resource('courses', CourseController::class)->except(['create', 'store', 'edit', 'update', 'destroy']);
 
     // Definizione delle risorse annidate per le lezioni e i quiz
     Route::prefix('courses/{course}')->group(function () {
         // Lezioni
-        Route::resource('lessons', LessonController::class)->names([
-            'index' => 'courses.lessons.index',
-            'create' => 'courses.lessons.create',
-            'store' => 'courses.lessons.store',
-            'show' => 'courses.lessons.show',
-            'edit' => 'courses.lessons.edit',
-            'update' => 'courses.lessons.update',
-            'destroy' => 'courses.lessons.destroy',
-        ]);
+        // Lezioni
+        Route::get('lessons', [LessonController::class, 'index'])->name('courses.lessons.index');
+        Route::get('lessons/{lesson}', [LessonController::class, 'show'])->name('courses.lessons.show');
 
-        // Quiz
-        Route::resource('quizzes', QuizController::class)->names([
-            'index' => 'courses.quizzes.index',
-            'create' => 'courses.quizzes.create',
-            'store' => 'courses.quizzes.store',
-            'show' => 'courses.quizzes.show',
-            'edit' => 'courses.quizzes.edit',
-            'update' => 'courses.quizzes.update',
-            'destroy' => 'courses.quizzes.destroy',
-        ]);
+        Route::middleware('role:admin,teacher')->group(function () {
+            Route::get('lessons/create', [LessonController::class, 'create'])->name('courses.lessons.create');
+            Route::post('lessons', [LessonController::class, 'store'])->name('courses.lessons.store');
+            Route::get('lessons/{lesson}/edit', [LessonController::class, 'edit'])->name('courses.lessons.edit');
+            Route::patch('lessons/{lesson}', [LessonController::class, 'update'])->name('courses.lessons.update');
+            Route::delete('lessons/{lesson}', [LessonController::class, 'destroy'])->name('courses.lessons.destroy');
+        });
+
+        Route::get('quizzes', [QuizController::class, 'index'])->name('courses.quizzes.index');
+        Route::get('quizzes/{quiz}', [QuizController::class, 'show'])->name('courses.quizzes.show');
+
+        Route::middleware('role:admin,teacher')->group(function () {
+            Route::get('quizzes/create', [QuizController::class, 'create'])->name('courses.quizzes.create');
+            Route::post('quizzes', [QuizController::class, 'store'])->name('courses.quizzes.store');
+            Route::get('quizzes/{quiz}/edit', [QuizController::class, 'edit'])->name('courses.quizzes.edit');
+            Route::patch('quizzes/{quiz}', [QuizController::class, 'update'])->name('courses.quizzes.update');
+            Route::delete('quizzes/{quiz}', [QuizController::class, 'destroy'])->name('courses.quizzes.destroy');
+        });
 
         // Rotta per sottomettere le risposte del quiz
         Route::post('quizzes/{quiz}/submit', [QuizController::class, 'submit'])->name('courses.quizzes.submit');

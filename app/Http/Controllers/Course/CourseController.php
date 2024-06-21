@@ -26,6 +26,7 @@ class CourseController extends Controller
 
     public function create()
     {
+        
         return view('courses.create');
     }
 
@@ -93,11 +94,13 @@ class CourseController extends Controller
 
     public function edit(Course $course)
     {
+        
         return view('courses.edit', ['course' => $course]);
     }
 
     public function update(Request $request, Course $course)
     {
+        
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -128,6 +131,7 @@ class CourseController extends Controller
 
     public function destroy(Course $course)
     {
+        
         $course->delete();
         return redirect()->route('courses.index')->with('success', 'Course deleted successfully.');
     }
