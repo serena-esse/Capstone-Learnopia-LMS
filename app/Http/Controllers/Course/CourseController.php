@@ -16,11 +16,19 @@ class CourseController extends Controller
     }
 
     // Display a listing of the courses
-    public function index()
+    public function index(Request $request)
     {
-        // Fetch all courses
-        $courses = Course::all();
-        return view('courses.index', ['courses' => $courses]);
+        $search = $request->input('search');
+
+        if ($search) {
+            $courses = Course::where('title', 'like', '%' . $search . '%')
+                ->orWhere('description', 'like', '%' . $search . '%')
+                ->paginate(10);
+        } else {
+            $courses = Course::paginate(10);
+        }
+
+        return view('courses.index', compact('courses')); // Restituisce la vista corretta
     }
 
     // Show the form for creating a new course
@@ -130,5 +138,12 @@ class CourseController extends Controller
             return redirect()->route('courses.show', $course)->with('success', 'You have been enrolled in the course.');
         }
         return redirect()->route('courses.show', $course)->with('error', 'You are already enrolled in this course.');
+    }
+
+    public function myCourses()
+    {
+        $user = Auth::user();
+        $courses = $user->courses()->paginate(10);
+        return view('courses.my', compact('courses'));
     }
 }

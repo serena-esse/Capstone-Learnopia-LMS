@@ -25,6 +25,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Routes for course management, accessible to all authenticated users
     Route::resource('courses', CourseController::class)->except(['create', 'store', 'edit', 'update', 'destroy']);
     Route::post('/courses/{course}/enroll', [CourseController::class, 'enroll'])->name('courses.enroll');
+    Route::get('/my-courses', [CourseController::class, 'myCourses'])->name('courses.my');
+
 
 
     // Nested resources for lessons and quizzes

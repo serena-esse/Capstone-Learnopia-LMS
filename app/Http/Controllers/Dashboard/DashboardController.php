@@ -9,14 +9,18 @@ use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Recupera i corsi dell'utente autenticato
-        $courses = Course::where('users_id', Auth::id())->get();
-        
-        // Passa i dati alla vista
-        return view('dashboard', [
-            'courses' => $courses
-        ]);
+        $search = $request->input('search');
+
+        if ($search) {
+            $courses = Course::where('title', 'like', '%' . $search . '%')
+                ->orWhere('description', 'like', '%' . $search . '%')
+                ->paginate(10);
+        } else {
+            $courses = Course::paginate(10);
+        }
+
+        return view('dashboard', compact('courses')); // Restituisce la vista corretta
     }
 }

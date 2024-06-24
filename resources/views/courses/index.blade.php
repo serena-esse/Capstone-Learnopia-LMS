@@ -20,6 +20,25 @@
                 @if ($courses->isEmpty())
                     <p>There are no courses to display.</p>
                 @else
+                <div class="row">  <form method="GET" action="{{ route('courses.index') }}">
+                    <div class="flex items-center">
+                        <input type="text" name="search" placeholder="Search courses..." class="form-input rounded-md shadow-sm mt-1 block w-full">
+                        <button type="submit" class="ml-2 btn btn-primary">Search</button>
+                    </div>
+                </form>
+                @if($courses->isEmpty())
+                <p>No courses found.</p>
+            @else
+                <ul>
+                    @foreach($courses as $course)
+                        <li class="mb-2">
+                            <a href="{{ route('courses.show', $course) }}" class="text-blue-500">{{ $course->title }}</a>
+                        </li>
+                    @endforeach
+                </ul>
+
+                {{ $courses->links() }}
+            @endif</div>
                     <div class="row">
                         @foreach ($courses as $course)
                             <div class="col-md-4 mb-4">

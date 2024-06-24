@@ -13,6 +13,27 @@
                     <h3 class="text-lg font-semibold mb-4">{{ __('Your Courses') }}</h3>
                     <!-- Elenco dei corsi -->
                     <div class="row">
+                        <form method="GET" action="{{ route('dashboard') }}">
+                            <div class="flex items-center">
+                                <input type="text" name="search" placeholder="Search courses..." class="form-input rounded-md shadow-sm mt-1 block w-full">
+                                <button type="submit" class="ml-2 btn btn-primary">Search</button>
+                            </div>
+                        </form>
+                        @if($courses->isEmpty())
+                            <p>No courses found.</p>
+                        @else
+                            <ul>
+                                @foreach($courses as $course)
+                                    <li class="mb-2">
+                                        <a href="{{ route('courses.show', $course) }}" class="text-blue-500">{{ $course->title }}</a>
+                                    </li>
+                                @endforeach
+                            </ul>
+
+                            {{ $courses->links() }} <!-- Metodo links() per collezioni paginate -->
+                        @endif
+                    </div>
+                    <div class="row">
                         @foreach($courses as $course)
                             <div class="col-md-4 mb-4">
                                 <a href="{{ route('courses.show', $course->id) }}" class="text-blue-500">
