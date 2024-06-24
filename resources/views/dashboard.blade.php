@@ -47,9 +47,11 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h3 class="text-lg font-semibold mb-4">{{ __('Quick Actions') }}</h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        @if (Auth::user()->isAdmin() || Auth::user()->isTeacher())
                         <a href="{{ route('courses.create') }}" class="dark:bg-gray-700 p-4 rounded-lg text-center">
                             {{ __('Create New Course') }}
                         </a>
+                        @endif
                     </div>
                 </div>
             </div>

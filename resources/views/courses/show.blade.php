@@ -47,13 +47,13 @@
         </div>
     </div>
 
-    <!-- Altri contenuti della vista -->
-
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
         <div class="overflow-hidden shadow sm:rounded-lg">
             <div class="p-6 bg-white border-b border-gray-200">
                 <h3 class="font-semibold text-lg text-gray-800 leading-tight">Lessons</h3>
+                @if (Auth::user()->isAdmin() || Auth::user()->isTeacher())
                 <a href="{{ route('courses.lessons.create', $course) }}" class="btn btn-primary mb-3">Add Lesson</a>
+                @endif
                 @if($course->lessons->isEmpty())
                     <p>No lessons available.</p>
                 @else
@@ -74,13 +74,15 @@
                                             {!! nl2br(e($lesson->content)) !!}
                                         </div>
                                         <div class="mt-auto">
-                                            <a href="{{ route('courses.lessons.show', [$course, $lesson]) }}" class="btn btn-warning btn-sm">View</a>
-                                            <a href="{{ route('courses.lessons.edit', [$course, $lesson]) }}" class="btn btn-warning btn-sm">Edit</a>
-                                            <form action="{{ route('courses.lessons.destroy', [$course, $lesson]) }}" method="POST" class="inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                            </form>
+                                            @if (Auth::user()->isAdmin() || Auth::user()->isTeacher())
+                                                <a href="{{ route('courses.lessons.show', [$course, $lesson]) }}" class="btn btn-warning btn-sm">View</a>
+                                                <a href="{{ route('courses.lessons.edit', [$course, $lesson]) }}" class="btn btn-warning btn-sm">Edit</a>
+                                                <form action="{{ route('courses.lessons.destroy', [$course, $lesson]) }}" method="POST" class="inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                                </form>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -96,7 +98,9 @@
         <div class="overflow-hidden shadow sm:rounded-lg">
             <div class="p-6 bg-white border-b border-gray-200">
                 <h3 class="font-semibold text-lg text-gray-800 leading-tight">Quizzes</h3>
+                @if (Auth::user()->isAdmin() || Auth::user()->isTeacher())
                 <a href="{{ route('courses.quizzes.create', $course) }}" class="btn btn-primary mb-3">Add Quiz</a>
+                @endif
                 @if($course->quizzes->isEmpty())
                     <p>No quizzes available.</p>
                 @else
@@ -104,7 +108,14 @@
                         @foreach($course->quizzes as $quiz)
                             <li class="mb-2">
                                 <a href="{{ route('courses.quizzes.show', [$course, $quiz]) }}" class="text-blue-500">{{ $quiz->title }}</a>
-                                <a href="{{ route('courses.quizzes.edit', ['course' => $course->id, 'quiz' => $quiz->id]) }}" class="btn btn-warning btn-sm">Edit</a>
+                                @if (Auth::user()->isAdmin() || Auth::user()->isTeacher())
+                                    <a href="{{ route('courses.quizzes.edit', ['course' => $course->id, 'quiz' => $quiz->id]) }}" class="btn btn-warning btn-sm">Edit</a>
+                                    <form action="{{ route('courses.quizzes.destroy', [$course, $quiz]) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                    </form>
+                                @endif
                             </li>
                         @endforeach
                     </ul>

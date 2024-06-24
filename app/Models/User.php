@@ -27,7 +27,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
 
+    /**
+     * Check if the user has the role of teacher
+     *
+     * @return bool
+     */
+    public function isTeacher()
+    {
+        return $this->role === 'teacher';
+    }
     public function courses()
     {
         return $this->belongsToMany(Course::class, 'course_user');

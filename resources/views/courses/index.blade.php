@@ -8,7 +8,9 @@
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-12">
+                @if (Auth::user()->isAdmin() || Auth::user()->isTeacher())
                 <a href="{{ route('courses.create') }}" class="btn btn-light mb-4">Create Course</a>
+                @endif
                 @if ($message = Session::get('success'))
                     <div class="alert alert-success mt-3">
                         {{ $message }}
@@ -33,12 +35,14 @@
                                         <p class="card-text"><small class="text-muted">End Date: {{ $course->end_date }}</small></p>
                                         <div class="mt-auto">
                                             <a href="{{ route('courses.show', $course->id) }}" class="btn btn-info btn-sm">View</a>
+                                            @if (Auth::user()->isAdmin() || Auth::user()->isTeacher())
                                             <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-warning btn-sm">Edit</a>
                                             <form action="{{ route('courses.destroy', $course->id) }}" method="POST" style="display:inline-block;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
                                             </form>
+                                            @endif
                                             <form action="{{ route('courses.enroll', $course) }}" method="POST">
                                                 @csrf
                                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Enroll in this course</button>
