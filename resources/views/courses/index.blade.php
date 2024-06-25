@@ -4,76 +4,62 @@
             {{ __('Courses') }}
         </h2>
     </x-slot>
-
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-12">
-                @if (Auth::user()->isAdmin() || Auth::user()->isTeacher())
-                <a href="{{ route('courses.create') }}" class="btn btn-light mb-4">Create Course</a>
-                @endif
-                @if ($message = Session::get('success'))
-                    <div class="alert alert-success mt-3">
-                        {{ $message }}
-                    </div>
-                @endif
-
-                @if ($courses->isEmpty())
-                    <p>There are no courses to display.</p>
-                @else
-                <div class="row">  <form method="GET" action="{{ route('courses.index') }}">
-                    <div class="flex items-center">
-                        <input type="text" name="search" placeholder="Search courses..." class="form-input rounded-md shadow-sm mt-1 block w-full">
-                        <button type="submit" class="ml-2 btn btn-primary">Search</button>
-                    </div>
-                </form>
-                @if($courses->isEmpty())
-                <p>No courses found.</p>
-            @else
-                <ul>
-                    @foreach($courses as $course)
-                        <li class="mb-2">
-                            <a href="{{ route('courses.show', $course) }}" class="text-blue-500">{{ $course->title }}</a>
-                        </li>
-                    @endforeach
-                </ul>
-
-                {{ $courses->links() }}
-            @endif</div>
-                    <div class="row">
-                        @foreach ($courses as $course)
-                            <div class="col-md-4 mb-4">
-                                <div class="card h-100">
-                                    <div class="card-body d-flex flex-column">
-                                        <h5 class="card-title">{{ $course->title }}</h5>
-                                        <!-- Display the course image if it exists -->
-                                        @if($course->image)
-                                            <img src="{{ asset('images/' . $course->image) }}" alt="{{ $course->title }}" class="img-fluid mb-3">
-                                        @endif
-                                        <p class="card-text">{{ $course->description }}</p>
-                                        <p class="card-text"><small class="text-muted">Start Date: {{ $course->start_date }}</small></p>
-                                        <p class="card-text"><small class="text-muted">End Date: {{ $course->end_date }}</small></p>
-                                        <div class="mt-auto">
-                                            <a href="{{ route('courses.show', $course->id) }}" class="btn btn-info btn-sm">View</a>
-                                            @if (Auth::user()->isAdmin() || Auth::user()->isTeacher())
-                                            <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                            <form action="{{ route('courses.destroy', $course->id) }}" method="POST" style="display:inline-block;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</button>
-                                            </form>
-                                            @endif
-                                            <form action="{{ route('courses.enroll', $course) }}" method="POST">
-                                                @csrf
-                                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Enroll in this course</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                @endif
-            </div>
+    
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-5">
+        @if (Auth::user()->isAdmin() || Auth::user()->isTeacher())
+        <div class="mb-4">
+            <a href="{{ route('courses.create') }}" class="btn btn-light">Create Course</a>
         </div>
+        @endif
+
+        @if ($message = Session::get('success'))
+        <div class="alert alert-success mt-3">
+            {{ $message }}
+        </div>
+        @endif
+
+        <div class="flex justify-center mb-4">
+            <form method="GET" action="{{ route('courses.index') }}" class="flex items-center">
+                <input type="text" name="search" placeholder="Search courses..." class="form-input rounded-md shadow-sm mt-1 block w-full">
+                <button type="submit" class="ml-2 btn btn-primary">Search</button>
+            </form>
+        </div>
+
+        @if ($courses->isEmpty())
+        <p>There are no courses to display.</p>
+        @else
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            @foreach ($courses as $course)
+            <div class="overflow-hidden bg-white shadow-sm rounded-lg">
+                @if($course->image)
+                <img src="{{ asset('images/' . $course->image) }}" alt="{{ $course->title }}" class="w-full h-56 object-cover">
+                @endif
+                <div class="p-4">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ $course->title }}</h3>
+                    <p class="text-gray-600 text-sm mb-4">{{ $course->description }}</p>
+                    <div class="flex justify-between items-center">
+                        <p class="text-xs text-gray-500">Start Date: {{ $course->start_date }}</p>
+                        <p class="text-xs text-gray-500">End Date: {{ $course->end_date }}</p>
+                    </div>
+                    <div class="mt-4 flex justify-end space-x-2">
+                        <a href="{{ route('courses.show', $course->id) }}" class="btn btn-info btn-sm">View</a>
+                        @if (Auth::user()->isAdmin() || Auth::user()->isTeacher())
+                        <a href="{{ route('courses.edit', $course->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                        <form action="{{ route('courses.destroy', $course->id) }}" method="POST" onsubmit="return confirm('Are you sure?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                        @endif
+                        <form action="{{ route('courses.enroll', $course) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-primary btn-sm">Enroll</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+        @endif
     </div>
 </x-app-layout>

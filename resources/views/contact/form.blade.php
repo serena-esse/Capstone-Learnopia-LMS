@@ -6,38 +6,42 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     @if (session('success'))
-                        <div class="alert alert-success">
+                        <div class="mb-4 text-sm font-medium text-green-600">
                             {{ session('success') }}
                         </div>
                     @endif
                     <form method="POST" action="{{ route('contact.submit') }}">
                         @csrf
-                        <div class="mb-3">
-                            <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
+                        <div class="mb-6">
+                            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                            <input type="text" name="name" id="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
                             @error('name')
-                                <div class="text-danger">{{ $message }}</div>
+                                <div class="text-sm text-red-600 mt-2">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
+                        <div class="mb-6">
+                            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                            <input type="email" name="email" id="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required>
                             @error('email')
-                                <div class="text-danger">{{ $message }}</div>
+                                <div class="text-sm text-red-600 mt-2">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="mb-3">
-                            <label for="message" class="form-label">Message</label>
-                            <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+                        <div class="mb-6">
+                            <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+                            <textarea name="message" id="message" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" required></textarea>
                             @error('message')
-                                <div class="text-danger">{{ $message }}</div>
+                                <div class="text-sm text-red-600 mt-2">{{ $message }}</div>
                             @enderror
                         </div>
-                        <button type="submit" class="btn btn-primary">Send Message</button>
+                        <div class="flex justify-end">
+                            <x-primary-button class="ml-3">
+                                {{ __('Send Message') }}
+                            </x-primary-button>
+                        </div>
                     </form>
                 </div>
             </div>

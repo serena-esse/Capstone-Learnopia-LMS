@@ -15,7 +15,6 @@ class CourseController extends Controller
         $this->middleware('auth');
     }
 
-    // Display a listing of the courses
     public function index(Request $request)
     {
         $search = $request->input('search');
@@ -28,16 +27,14 @@ class CourseController extends Controller
             $courses = Course::paginate(10);
         }
 
-        return view('courses.index', compact('courses')); // Restituisce la vista corretta
+        return view('courses.index', compact('courses'));
     }
 
-    // Show the form for creating a new course
     public function create()
     {
         return view('courses.create');
     }
 
-    // Store a newly created course in the database
     public function store(Request $request)
     {
         $request->validate([
@@ -81,20 +78,17 @@ class CourseController extends Controller
         }
     }
 
-    // Display the specified course
     public function show(Course $course)
     {
         $quizzes = $course->quizzes()->get();
         return view('courses.show', compact('course', 'quizzes'));
     }
 
-    // Show the form for editing the specified course
     public function edit(Course $course)
     {
         return view('courses.edit', ['course' => $course]);
     }
 
-    // Update the specified course in the database
     public function update(Request $request, Course $course)
     {
         $request->validate([
@@ -124,12 +118,12 @@ class CourseController extends Controller
         }
     }
 
-    // Remove the specified course from the database
     public function destroy(Course $course)
     {
         $course->delete();
         return redirect()->route('courses.index')->with('success', 'Course deleted successfully.');
     }
+
     public function enroll(Course $course)
     {
         $user = auth()->user();
@@ -139,11 +133,12 @@ class CourseController extends Controller
         }
         return redirect()->route('courses.show', $course)->with('error', 'You are already enrolled in this course.');
     }
-
     public function myCourses()
     {
         $user = Auth::user();
-        $courses = $user->courses()->paginate(10);
+        $courses = $user->courses; // Retrieve courses the user is enrolled in
+
         return view('courses.my', compact('courses'));
     }
+
 }

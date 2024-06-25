@@ -18,9 +18,9 @@
                             <input type="file" class="form-control" id="profile_image" name="profile_image">
                         </div>
                     
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <x-primary-button type="submit">
                             Save
-                        </button>
+                        </x-primary-button>
                     </form>
                 </div>
             </div>

@@ -9,27 +9,23 @@ class Course extends Model
 {
     use HasFactory;
 
-    /**
-     * The users that belong to the course.
-     */
+    protected $fillable = [
+        'title', 'description', 'start_date', 'end_date', 'users_id', 'image'
+    ];
+
     public function users()
     {
-        return $this->belongsToMany(User::class, 'course_user');
+        return $this->belongsToMany(User::class, 'course_user', 'course_id', 'user_id');
     }
 
-    /**
-     * The lessons that belong to the course.
-     */
-    public function lessons()
-    {
-        return $this->hasMany(Lesson::class);
-    }
-
-    /**
-     * The quizzes that belong to the course.
-     */
     public function quizzes()
     {
         return $this->hasMany(Quiz::class);
     }
+
+    public function lessons()
+    {
+        return $this->hasMany(Lesson::class);
+    }
+   
 }
