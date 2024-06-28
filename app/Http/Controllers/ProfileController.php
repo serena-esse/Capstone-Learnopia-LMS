@@ -36,8 +36,8 @@ class ProfileController extends Controller
             $path = $request->file('profile_image')->store('profile_images', 'public');
             Log::info('Immagine profilo salvata in: ' . $path);
 
-            // Save the path without 'public/storage/' prefix
-            $data['profile_image'] = basename($path);
+            // Save the path
+            $data['profile_image'] = $path;
         } else {
             Log::error('File non caricato correttamente.');
         }

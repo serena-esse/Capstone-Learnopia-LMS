@@ -27,5 +27,17 @@ class Course extends Model
     {
         return $this->hasMany(Lesson::class);
     }
+    public function getProgressForUser($userId)
+    {
+        $totalLessons = $this->lessons->count();
+        if ($totalLessons === 0) {
+            return 0;
+        }
+
+        $completedLessons = UserLesson::where('user_id', $userId)
+                                      ->whereIn('lesson_id', $this->lessons->pluck('id'))
+                                      ->count();
+
+        return ($completedLessons / $totalLessons) * 100;}
    
 }

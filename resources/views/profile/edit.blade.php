@@ -12,6 +12,13 @@
                     <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
                         @csrf
                         @method('PATCH')
+
+                        <!-- Visualizzazione dell'immagine del profilo -->
+                        @if (Auth::user()->profile_image)
+                            <div class="mb-4">
+                                <img src="{{ asset('storage/' . Auth::user()->profile_image) }}" alt="Profile Image" class="w-32 h-32 rounded-full object-cover">
+                            </div>
+                        @endif
                     
                         <div class="form-group">
                             <label for="profile_image">Profile Image</label>

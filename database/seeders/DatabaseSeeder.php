@@ -1,5 +1,6 @@
 <?php
 
+
 // database/seeders/DatabaseSeeder.php
 
 namespace Database\Seeders;
@@ -29,6 +30,18 @@ class DatabaseSeeder extends Seeder
             'name' => 'Admin User',
             'email' => 'admin@example.com',
             'password' => bcrypt('admin'),
+        ]);
+
+        // Chiamata ad altri seeder
+        $this->call([
+            // Elenca qui i seeder che vuoi chiamare
+            CourseSeeder::class,
+            LessonSeeder::class,
+            QuizSeeder::class,
+            QuestionSeeder::class,
+            AnswerSeeder::class,
+
+            // Aggiungi altri seeder se necessario
         ]);
     }
 }

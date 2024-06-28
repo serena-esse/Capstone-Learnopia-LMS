@@ -49,7 +49,7 @@
 
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
         <div class="overflow-hidden shadow sm:rounded-lg">
-            <div class="p-6 bg-white border-b border-gray-200">
+            <div class="p-6  border-b border-gray-200">
                 <h3 class="text-lg font-semibold mb-4">Lessons</h3>
                 @if (Auth::user()->isAdmin() || Auth::user()->isTeacher())
                     <a href="{{ route('courses.lessons.create', $course) }}" class="btn btn-primary mb-3">Add Lesson</a>
@@ -61,7 +61,7 @@
                         @foreach($course->lessons as $lesson)
                             <div class="flex flex-col bg-white border border-gray-300 rounded-lg shadow-sm overflow-hidden">
                                 <div class="p-4 flex-1">
-                                    <a href="{{ route('courses.lessons.show', [$course, $lesson]) }}" class="text-blue-500 font-semibold">{{ $lesson->title }}</a>
+                                    <a href="{{ route('courses.lessons.show', [$course, $lesson]) }}" class=" font-semibold">{{ $lesson->title }}</a>
                                     <div class="mt-2">
                                         @if ($lesson->video_url)
                                             <div class="video-container">

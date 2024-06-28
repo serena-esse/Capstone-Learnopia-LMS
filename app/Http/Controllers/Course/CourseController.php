@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Course;
 
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\UserLesson;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -76,6 +77,7 @@ class CourseController extends Controller
             Log::error('Error creating course: ' . $e->getMessage());
             return redirect()->back()->withErrors(['error' => 'Failed to create course. Please try again.']);
         }
+    
     }
 
     public function show(Course $course)
@@ -136,9 +138,26 @@ class CourseController extends Controller
     public function myCourses()
     {
         $user = Auth::user();
-        $courses = $user->courses; // Retrieve courses the user is enrolled in
-
+        $courses = $user->courses; // Recupera i corsi a cui l'utente è iscritto
+    
         return view('courses.my', compact('courses'));
     }
+
+    public function calculateProgress($courseId, $userId)
+{
+    $course = Course::with('lessons')->findOrFail($courseId);
+    $totalLessons = $course->lessons->count();
+    
+    $completedLessons = UserLesson::where('user_id', $userId)
+                                  ->whereIn('lesson_id', $course->lessons->pluck('id'))
+                                  ->count();
+
+    if ($totalLessons == 0) {
+        return 0;
+    }
+
+    return ($completedLessons / $totalLessons) * 100;
+}
+    
 
 }

@@ -7,7 +7,6 @@ return [
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),
-            'throw' => false,
         ],
 
         'public' => [
@@ -15,17 +14,15 @@ return [
             'root' => storage_path('app/public'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
-            
         ],
 
-      'profile_images' => [
-    'driver' => 'local',
-    'root' => public_path('storage/profile_images'),
-    'url' => env('APP_URL').'/storage/profile_images',
-    'visibility' => 'public',
-    'throw' => false,
-],
-
+        'profile_images' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/profile_images'),
+            'url' => env('APP_URL').'/storage/profile_images',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
 
         's3' => [
             'driver' => 's3',

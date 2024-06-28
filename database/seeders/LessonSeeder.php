@@ -21,7 +21,7 @@ class LessonSeeder extends Seeder
             for ($i = 0; $i < 5; $i++) {
                 Lesson::create([
                     'course_id' => $course->id,
-                    'video_url' => $faker->url,
+                    'video_url' => 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
                     'title' => $faker->sentence(3),
                     'content' => $faker->paragraph(5),
                 ]);
