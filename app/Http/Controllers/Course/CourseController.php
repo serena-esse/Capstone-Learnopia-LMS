@@ -19,7 +19,7 @@ class CourseController extends Controller
     public function index(Request $request)
     {
         $search = $request->input('search');
-
+    
         if ($search) {
             $courses = Course::where('title', 'like', '%' . $search . '%')
                 ->orWhere('description', 'like', '%' . $search . '%')
@@ -27,11 +27,11 @@ class CourseController extends Controller
         } else {
             $courses = Course::paginate(10);
         }
-
+    
         return view('courses.index', compact('courses'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
         return view('courses.create');
     }

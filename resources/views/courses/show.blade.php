@@ -42,7 +42,7 @@
                 <div class="mb-4">
                     <p><strong>End Date:</strong> {{ $course->end_date }}</p>
                 </div>
-                <a href="{{ route('courses.index') }}" class="btn btn-primary">Back to Courses</a>
+               <x-primary-button> <a href="{{ route('courses.index') }}">Back to Courses</a></x-primary-button> 
             </div>
         </div>
     </div>
@@ -52,8 +52,8 @@
             <div class="p-6  border-b border-gray-200">
                 <h3 class="text-lg font-semibold mb-4">Lessons</h3>
                 @if (Auth::user()->isAdmin() || Auth::user()->isTeacher())
-                    <a href="{{ route('courses.lessons.create', $course) }}" class="btn btn-primary mb-3">Add Lesson</a>
-                @endif
+                <x-primary-button> <a href="{{ route('courses.lessons.create', ['course' => $course->id]) }}" class=" mb-3">Add Lesson</a> </x-primary-button>
+            @endif
                 @if($course->lessons->isEmpty())
                     <p>No lessons available.</p>
                 @else
@@ -78,11 +78,11 @@
                                 <div class="p-4 bg-gray-100">
                                     @if (Auth::user()->isAdmin() || Auth::user()->isTeacher())
                                         <div class="flex justify-end space-x-2">
-                                            <a href="{{ route('courses.lessons.edit', [$course, $lesson]) }}" class="btn btn-warning btn-sm">Edit</a>
+                                            <x-secondary-button><a href="{{ route('courses.lessons.edit', [$course, $lesson]) }}" class=" btn-sm">Edit</a></x-secondary-button>
                                             <form action="{{ route('courses.lessons.destroy', [$course, $lesson]) }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                                <x-danger-button type="submit" class="btn  btn-sm">Delete</x-danger-button>
                                             </form>
                                         </div>
                                     @endif
@@ -100,32 +100,37 @@
             <div class="p-6 bg-white border-b border-gray-200">
                 <h3 class="text-lg font-semibold mb-4">Quizzes</h3>
                 @if (Auth::user()->isAdmin() || Auth::user()->isTeacher())
-                    <a href="{{ route('courses.quizzes.create', $course) }}" class="btn btn-primary mb-3">Add Quiz</a>
+                    <div class="mb-4">
+                        <x-primary-button><a href="{{ route('courses.quizzes.create', $course) }}" class="text-white">Add Quiz</a></x-primary-button>
+                    </div>
                 @endif
                 @if($course->quizzes->isEmpty())
                     <p>No quizzes available.</p>
                 @else
-                    <ul>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach($course->quizzes as $quiz)
-                            <li class="mb-2">
-                                <a href="{{ route('courses.quizzes.show', [$course, $quiz]) }}" class="text-blue-500">{{ $quiz->title }}</a>
+                            <div class="bg-white border border-gray-200 rounded-lg shadow-sm p-4 flex flex-col justify-between">
+                                <div>
+                                    <a href="{{ route('courses.quizzes.show', [$course, $quiz]) }}" class="text-lg font-semibold text-blue-500">{{ $quiz->title }}</a>
+                                </div>
                                 @if (Auth::user()->isAdmin() || Auth::user()->isTeacher())
-                                    <div class="flex justify-end">
-                                        <a href="{{ route('courses.quizzes.edit', ['course' => $course->id, 'quiz' => $quiz->id]) }}" class="btn btn-warning btn-sm">Edit</a>
+                                    <div class="flex justify-end mt-4">
+                                       <x-secondary-button> <a href="{{ route('courses.quizzes.edit', ['course' => $course->id, 'quiz' => $quiz->id]) }}" class="mr-2  btn-sm ">Edit</a></x-secondary-button>
                                         <form action="{{ route('courses.quizzes.destroy', [$course, $quiz]) }}" method="POST" class="inline">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                            <x-danger-button type="submit" class="btn btn-sm ">Delete</x-danger-button>
                                         </form>
                                     </div>
                                 @endif
-                            </li>
+                            </div>
                         @endforeach
-                    </ul>
+                    </div>
                 @endif
             </div>
         </div>
     </div>
+    
 
     <style>
         .video-container {

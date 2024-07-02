@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Lesson;
 use App\Models\Course;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Log;
 
 class LessonController extends Controller
 {
@@ -17,8 +18,12 @@ class LessonController extends Controller
 
     public function create(Course $course)
     {
+        
+
         return view('lessons.create', compact('course'));
     }
+
+
 
     public function store(Request $request, Course $course)
     {

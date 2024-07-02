@@ -38,10 +38,12 @@
                                         <p class="text-sm text-gray-500">Progress: {{ number_format($course->progress, 2) }}%</p>
                                     </div>
                                 </a>
-                                <div class="p-4 border-t border-gray-200 bg-gray-50 text-center">
-                                    <a href="{{ route('courses.show', $course->id) }}" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg inline-block">
-                                        View Course
-                                    </a>
+                                <div class="flex justify-center p-4">
+                                    <x-primary-button>
+                                        <a href="{{ route('courses.show', $course->id) }}">
+                                            View Course
+                                        </a>
+                                    </x-primary-button>
                                 </div>
                             </div>
                         @endforeach
@@ -51,13 +53,13 @@
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-6">
                         <div class="p-6 text-gray-900">
                             <h3 class="text-lg font-semibold mb-4">{{ __('Quick Actions') }}</h3>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <x-primary-button class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                                 @if (Auth::user()->isAdmin() || Auth::user()->isTeacher())
-                                    <a href="{{ route('courses.create') }}" class="bg-orange-600 p-4 rounded-lg text-center text-white font-bold hover:bg-orange-500">
+                                    <a href="{{ route('courses.create') }}" class="p-4 rounded-lg text-center text-white font-bold">
                                         {{ __('Create New Course') }}
                                     </a>
                                 @endif
-                            </div>
+                            </x-primary-button>
                         </div>
                     </div>
 

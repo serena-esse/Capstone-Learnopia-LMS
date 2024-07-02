@@ -39,7 +39,7 @@
                         </div>
                         
      
-                        <button type="submit" class="btn btn-primary">Update</button>
+                        <x-primary-button type="submit" class="btn btn-primary">Update</x-primary-button>
                     </form>
                 </div>
             </div>

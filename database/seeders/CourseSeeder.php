@@ -21,7 +21,7 @@ class CourseSeeder extends Seeder
             for ($i = 0; $i < 3; $i++) {
                 Course::create([
                     'title' => $faker->sentence(3),
-                    'image' => $faker->imageUrl(),
+                    'image' =>'https://placekitten.com/200/300',
                     'description' => $faker->paragraph(3),
                     'start_date' => $faker->date(),
                     'end_date' => $faker->date(),

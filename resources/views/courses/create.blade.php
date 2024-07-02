@@ -31,7 +31,7 @@
                         <label for="image">Image</label>
                         <input type="file" name="image" id="image" class="form-control">
                     </div>
-                    <button type="submit" class="btn btn-primary">Create Course</button>
+                    <x-primary-button type="submit" class="btn btn-primary">Create Course</x-primary-button>
                 </form>
             </div>
         </div>

@@ -7,9 +7,9 @@
     
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-5 bg-fef7ed rounded-lg shadow-lg p-6">
         @if (Auth::user()->isAdmin() || Auth::user()->isTeacher())
-        <div class="mb-4">
+        <x-primary-button class="mb-4">
             <a href="{{ route('courses.create') }}" class="bg-e57e5b hover:bg-dc6c49 text-white font-bold py-2 px-4 rounded-lg inline-block">Create Course</a>
-        </div>
+        </x-primary-button>
         @endif
 
         @if ($message = Session::get('success'))
@@ -21,7 +21,7 @@
         <div class="flex justify-center mb-4">
             <form method="GET" action="{{ route('courses.index') }}" class="flex items-center">
                 <input type="text" name="search" placeholder="Search courses..." class="form-input rounded-md shadow-sm mt-1 block w-full">
-                <x-primary-button type="submit" class="ml-2">Search</x-primary-button>
+                <x-secondary-button type="submit" class="ml-2">Search</x-secondary-button>
             </form>
         </div>
 
@@ -64,4 +64,12 @@
         </div>
         @endif
     </div>
+    <!-- Paginazione -->
+    <div class="mt-6">
+        {{ $courses->links() }}
+    </div>
+</div>
+</div>
+</div>
+</div>
 </x-app-layout>
