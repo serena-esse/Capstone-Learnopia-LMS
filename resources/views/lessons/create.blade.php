@@ -1,8 +1,4 @@
-{{-- resources/views/lessons/create.blade.php --}}
-
-@extends('layouts.app')
-
-@section('content')
+<x-app-layout>
     <div class="container">
         <h1>Create New Lesson for {{ $course->title }}</h1>
 
@@ -33,4 +29,4 @@
             <button type="submit">Save Lesson</button>
         </form>
     </div>
-@endsection
+</x-app-layout>

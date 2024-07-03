@@ -1,6 +1,5 @@
 <?php
 
-
 use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Course\CourseController;
 use App\Http\Controllers\LessonController;
@@ -11,8 +10,6 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
-// routes/web.php
-
 Route::get('/', function () {
     return redirect()->route('login');
 });
@@ -20,9 +17,11 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
     Route::get('/contact', [ContactController::class, 'showContactForm'])->name('contact.form');
     Route::post('/contact', [ContactController::class, 'submitContactForm'])->name('contact.submit');
 
@@ -30,12 +29,33 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/courses/{course}/enroll', [CourseController::class, 'enroll'])->name('courses.enroll');
     Route::get('/my-courses', [CourseController::class, 'myCourses'])->name('courses.my');
 
-    Route::get('/courses/{course}/lessons', [LessonController::class, 'index'])->name('courses.lessons.index');
-    Route::get('/courses/{course}/lessons/{lesson}', [LessonController::class, 'show'])->name('courses.lessons.show');
-    Route::get('/courses/{course}/quizzes', [QuizController::class, 'index'])->name('courses.quizzes.index');
-    Route::get('/courses/{course}/quizzes/{quiz}', [QuizController::class, 'show'])->name('courses.quizzes.show');
-    Route::post('/courses/{course}/quizzes/{quiz}/submit', [QuizController::class, 'submit'])->name('courses.quizzes.submit');
-    Route::get('/courses/{course}/lessons/{lesson}/files/{file}', [FileController::class, 'download'])->name('courses.lessons.files.download');
+    Route::prefix('courses/{course}')->group(function () {
+        // Lessons
+        Route::resource('lessons', LessonController::class)->names([
+            'index' => 'courses.lessons.index',
+            'create' => 'courses.lessons.create',
+            'store' => 'courses.lessons.store',
+            'show' => 'courses.lessons.show',
+            'edit' => 'courses.lessons.edit',
+            'update' => 'courses.lessons.update',
+            'destroy' => 'courses.lessons.destroy',
+        ]);
+        Route::get('/lessons/{lesson}/files/{file}', [FileController::class, 'download'])->name('courses.lessons.files.download');
+        Route::get('/lessons/{lesson}/files/upload', [FileController::class, 'showUploadForm'])->name('courses.lessons.files.upload.form');
+        Route::post('/lessons/{lesson}/files', [FileController::class, 'upload'])->name('courses.lessons.files.upload');
+
+        // Quizzes
+        Route::resource('quizzes', QuizController::class)->names([
+            'index' => 'courses.quizzes.index',
+            'create' => 'courses.quizzes.create',
+            'store' => 'courses.quizzes.store',
+            'show' => 'courses.quizzes.show',
+            'edit' => 'courses.quizzes.edit',
+            'update' => 'courses.quizzes.update',
+            'destroy' => 'courses.quizzes.destroy',
+        ]);
+        Route::post('/quizzes/{quiz}/submit', [QuizController::class, 'submit'])->name('courses.quizzes.submit');
+    });
 });
 
 Route::middleware(['auth', 'verified', 'role:admin,teacher'])->group(function () {
@@ -56,9 +76,6 @@ Route::middleware(['auth', 'verified', 'role:admin,teacher'])->group(function ()
     Route::get('/courses/{course}/quizzes/{quiz}/edit', [QuizController::class, 'edit'])->name('courses.quizzes.edit');
     Route::put('/courses/{course}/quizzes/{quiz}', [QuizController::class, 'update'])->name('courses.quizzes.update');
     Route::delete('/courses/{course}/quizzes/{quiz}', [QuizController::class, 'destroy'])->name('courses.quizzes.destroy');
-
-    Route::get('/courses/{course}/lessons/{lesson}/files/upload', [FileController::class, 'showUploadForm'])->name('courses.lessons.files.upload.form');
-    Route::post('/courses/{course}/lessons/{lesson}/files', [FileController::class, 'upload'])->name('courses.lessons.files.upload');
 });
 
 require __DIR__.'/auth.php';
