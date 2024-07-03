@@ -17,19 +17,21 @@ class CourseController extends Controller
     }
 
     public function index(Request $request)
-    {
-        $search = $request->input('search');
-    
-        if ($search) {
-            $courses = Course::where('title', 'like', '%' . $search . '%')
-                ->orWhere('description', 'like', '%' . $search . '%')
-                ->paginate(10);
-        } else {
-            $courses = Course::paginate(10);
-        }
-    
-        return view('courses.index', compact('courses'));
+{
+    $search = $request->input('search');
+
+    if ($search) {
+        // If search term is provided, filter courses by title or description
+        $courses = Course::where('title', 'like', '%' . $search . '%')
+            ->orWhere('description', 'like', '%' . $search . '%')
+            ->paginate(10);
+    } else {
+        // If no search term provided, fetch all courses with pagination
+        $courses = Course::paginate(10);
     }
+
+    return view('courses.index', compact('courses'));
+}
 
     public function create(Request $request)
     {

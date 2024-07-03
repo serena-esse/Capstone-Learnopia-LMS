@@ -51,7 +51,7 @@
                                 <label for="file" class="form-label">Choose File:</label>
                                 <input type="file" name="file" id="file" class="form-control">
                             </div>
-                            <button type="submit" class="btn btn-primary">Upload</button>
+                            <x-primary-button type="submit" class="btn btn-primary">Upload</x-primary-button >
                         </form>
                     </div>
                 @endif

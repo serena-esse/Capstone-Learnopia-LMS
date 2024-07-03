@@ -28,10 +28,11 @@
                     <h2 class="text-2xl font-semibold">{{ $course->title }}</h2>
                 </div>
                 @if ($course->image)
-                    <div class="mb-4">
-                        <img src="{{ asset('images/' . $course->image) }}" alt="{{ $course->title }}" class="rounded-lg">
-                    </div>
-                @endif
+                <div class="mb-4">
+                    <img src="{{ asset('images/' . $course->image) }}" alt="{{ $course->title }}" class="w-32 h-32 object-cover rounded-lg">
+                </div>
+            @endif
+            
 
                 <div class="mb-4">
                     <p>{{ $course->description }}</p>
@@ -42,18 +43,18 @@
                 <div class="mb-4">
                     <p><strong>End Date:</strong> {{ $course->end_date }}</p>
                 </div>
-               <x-primary-button> <a href="{{ route('courses.index') }}">Back to Courses</a></x-primary-button> 
+                <x-primary-button><a href="{{ route('courses.index') }}">Back to Courses</a></x-primary-button>
             </div>
         </div>
     </div>
 
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-4">
         <div class="overflow-hidden shadow sm:rounded-lg">
-            <div class="p-6  border-b border-gray-200">
+            <div class="p-6 border-b border-gray-200">
                 <h3 class="text-lg font-semibold mb-4">Lessons</h3>
                 @if (Auth::user()->isAdmin() || Auth::user()->isTeacher())
-                <x-primary-button> <a href="{{ route('courses.lessons.create', ['course' => $course->id]) }}" class=" mb-3">Add Lesson</a> </x-primary-button>
-            @endif
+                    <x-primary-button><a href="{{ route('courses.lessons.create', ['course' => $course->id]) }}" class="mb-3">Add Lesson</a></x-primary-button>
+                @endif
                 @if($course->lessons->isEmpty())
                     <p>No lessons available.</p>
                 @else
@@ -61,7 +62,7 @@
                         @foreach($course->lessons as $lesson)
                             <div class="flex flex-col bg-white border border-gray-300 rounded-lg shadow-sm overflow-hidden">
                                 <div class="p-4 flex-1">
-                                    <a href="{{ route('courses.lessons.show', [$course, $lesson]) }}" class=" font-semibold">{{ $lesson->title }}</a>
+                                    <a href="{{ route('courses.lessons.show', [$course, $lesson]) }}" class="font-semibold">{{ $lesson->title }}</a>
                                     <div class="mt-2">
                                         @if ($lesson->video_url)
                                             <div class="video-container">
@@ -76,16 +77,17 @@
                                     </div>
                                 </div>
                                 <div class="p-4 bg-gray-100">
-                                    @if (Auth::user()->isAdmin() || Auth::user()->isTeacher())
-                                        <div class="flex justify-end space-x-2">
-                                            <x-secondary-button><a href="{{ route('courses.lessons.edit', [$course, $lesson]) }}" class=" btn-sm">Edit</a></x-secondary-button>
+                                    <div class="flex justify-end space-x-2">
+                                        <x-primary-button><a href="{{ route('courses.lessons.show', [$course, $lesson]) }}" class="btn-sm">View</a></x-primary-button>
+                                        @if (Auth::user()->isAdmin() || Auth::user()->isTeacher())
+                                            <x-secondary-button><a href="{{ route('courses.lessons.edit', [$course, $lesson]) }}" class="btn-sm">Edit</a></x-secondary-button>
                                             <form action="{{ route('courses.lessons.destroy', [$course, $lesson]) }}" method="POST" class="inline">
                                                 @csrf
                                                 @method('DELETE')
-                                                <x-danger-button type="submit" class="btn  btn-sm">Delete</x-danger-button>
+                                                <x-danger-button type="submit" class="btn-sm">Delete</x-danger-button>
                                             </form>
-                                        </div>
-                                    @endif
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         @endforeach
@@ -115,11 +117,11 @@
                                 </div>
                                 @if (Auth::user()->isAdmin() || Auth::user()->isTeacher())
                                     <div class="flex justify-end mt-4">
-                                       <x-secondary-button> <a href="{{ route('courses.quizzes.edit', ['course' => $course->id, 'quiz' => $quiz->id]) }}" class="mr-2  btn-sm ">Edit</a></x-secondary-button>
+                                        <x-secondary-button><a href="{{ route('courses.quizzes.edit', ['course' => $course->id, 'quiz' => $quiz->id]) }}" class="mr-2 btn-sm">Edit</a></x-secondary-button>
                                         <form action="{{ route('courses.quizzes.destroy', [$course, $quiz]) }}" method="POST" class="inline">
                                             @csrf
                                             @method('DELETE')
-                                            <x-danger-button type="submit" class="btn btn-sm ">Delete</x-danger-button>
+                                            <x-danger-button type="submit" class="btn-sm">Delete</x-danger-button>
                                         </form>
                                     </div>
                                 @endif
@@ -130,7 +132,6 @@
             </div>
         </div>
     </div>
-    
 
     <style>
         .video-container {
