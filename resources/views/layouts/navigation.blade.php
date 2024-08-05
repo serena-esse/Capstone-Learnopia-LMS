@@ -1,6 +1,11 @@
-<nav class="fixed z-10 h-full shadow-md w-64 hidden md:flex flex-col">
+<nav id="mySidebar" class="fixed z-10 h-full shadow-md w-64 hidden md:flex flex-col">
     <!-- Sidebar Navigation Menu -->
     <div class="flex flex-col h-full">
+        <!-- Close Button -->
+        <div class="flex items-center justify-end p-4">
+            <button class="closebtn text-black text-2xl" onclick="closeNav()">&times;</button>
+        </div>
+
         <div class="flex items-center justify-center h-16">
             <!-- Logo -->
             <a href="{{ route('home') }}">
@@ -12,16 +17,16 @@
         <div class="flex-grow mt-4">
             <div class="flex flex-col space-y-2">
                 <x-nav-link :href="route('home')" :active="request()->routeIs('home')" class="block px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-green-100">
-                    {{ __('Home') }}
+                    <i class="fas fa-home mr-2"></i> {{ __('Home') }}
                 </x-nav-link>
                 <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="block px-4 py-2 text-sm font-semibold text-black hover:bg-green-100">
-                    {{ __('Dashboard') }}
+                    <i class="fas fa-tachometer-alt mr-2"></i>{{ __('Dashboard') }}
                 </x-nav-link>
                 <x-nav-link :href="route('courses.index')" :active="request()->routeIs('courses.*')" class="block px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-green-100">
-                    {{ __('Courses') }}
+                    <i class="fas fa-book mr-2"></i>{{ __('Courses') }}
                 </x-nav-link>
                 <x-nav-link :href="route('contact.form')" :active="request()->routeIs('contact.form')" class="block px-4 py-2 text-sm font-semibold text-gray-900 hover:bg-green-100">
-                    {{ __('Contact Us') }}
+                    <i class="fas fa-envelope mr-2"></i>{{ __('Contact Us') }}
                 </x-nav-link>
             </div>
         </div>
@@ -67,3 +72,21 @@
         </div>
     </div>
 </nav>
+
+<div id="main">
+    <button class="openbtn" onclick="openNav()" id="openbtn">☰ Open Sidebar</button>
+</div>
+
+<script>
+    function openNav() {
+        document.getElementById("mySidebar").classList.remove('hidden');
+        document.getElementById("main").style.marginLeft = "250px";
+        document.getElementById("openbtn").style.display = 'none';
+    }
+
+    function closeNav() {
+        document.getElementById("mySidebar").classList.add('hidden');
+        document.getElementById("main").style.marginLeft = "0";
+        document.getElementById("openbtn").style.display = 'block';
+    }
+</script>

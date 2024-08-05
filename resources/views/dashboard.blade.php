@@ -12,12 +12,14 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <form method="GET" action="{{ route('dashboard') }}">
                         <div class="flex items-center">
-                            <input type="text" name="search" placeholder="Search courses..." class="form-input rounded-md shadow-sm mt-1 block w-full">
-                            <x-secondary-button type="submit" class="ml-2">Search</x-secondary-button>
+                            <input type="text" name="search" placeholder="Search courses..." class="form-input rounded-md shadow-sm mt-1 block w-full h-12">
+                            <button type="submit" class="ml-2 bg-yellow-500 hover:bg-yellow-600 text-white font-bold px-4 rounded-lg shadow-lg inline-flex items-center justify-center text-xs h-12">Search</button>
                         </div>
                     </form>
                 </div>
             </div>
+         
+                        
 
             <!-- Elenco dei corsi -->
             <div class="overflow-hidden shadow-sm sm:rounded-lg">
@@ -39,11 +41,11 @@
                                     </div>
                                 </a>
                                 <div class="flex justify-center p-4">
-                                    <x-primary-button>
-                                        <a href="{{ route('courses.show', $course->id) }}">
+                                    
+                                        <a href="{{ route('courses.show', $course->id) }}" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-1 px-3 rounded-lg shadow-lg inline-flex items-center justify-center text-sm">
                                             View Course
                                         </a>
-                                    </x-primary-button>
+                                    
                                 </div>
                             </div>
                         @endforeach
@@ -53,13 +55,13 @@
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-6">
                         <div class="p-6 text-gray-900">
                             <h3 class="text-lg font-semibold mb-4">{{ __('Quick Actions') }}</h3>
-                            <x-primary-button class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                            
                                 @if (Auth::user()->isAdmin() || Auth::user()->isTeacher())
-                                    <a href="{{ route('courses.create') }}" class="p-4 rounded-lg text-center text-white font-bold">
+                                    <a href="{{ route('courses.create') }}" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-1 px-3 rounded-lg shadow-lg inline-flex items-center justify-center text-sm">
                                         {{ __('Create New Course') }}
                                     </a>
                                 @endif
-                            </x-primary-button>
+                            
                         </div>
                     </div>
 

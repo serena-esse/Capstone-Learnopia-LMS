@@ -17,3 +17,11 @@ body {
 nav {
     background-color: #fef7ed;
 }
+
+.cover .button-container {
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow under the button */
+}

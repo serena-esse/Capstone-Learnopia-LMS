@@ -10,12 +10,78 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Bootstrap -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        
+        
+        
+               
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            display: none; /* Nasconde la sidebar di default */
+        }
+
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        .openbtn {
+            position: fixed;
+            font-size: 12px;
+            cursor: pointer;
+            background-color: #ECAC15;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            z-index: 20;
+            top: 20px; 
+            left: 20px;
+            border-radius: 8px;
+            
+        }
+        .openbtn:hover {
+            background-color: #E69C0F;
+        }
+
+        #main {
+            transition: margin-left .5s;
+            
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body class="font-sans antialiased">
     <div class="min-h-screen flex" x-data="{ open: false }">
@@ -23,7 +89,7 @@
         @include('layouts.navigation')
 
         <!-- Main Content -->
-        <div :class="{'md:ml-64': !open, 'ml-0': open}" class="flex-grow transition-all duration-300 ease-in-out">
+        <div :class="{'md:ml-32': open, 'ml-0': !open}" class="flex-grow transition-all duration-300 ease-in-out">
             <!-- Page Heading -->
             @if (isset($header))
                 <header class="shadow pt-4">
@@ -89,5 +155,6 @@
             </div>
         </div>
     </div>
+    
 </body>
 </html>
